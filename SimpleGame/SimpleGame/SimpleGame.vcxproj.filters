@@ -9,45 +9,56 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{3195a633-0fac-4bcf-b0af-78026874420d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Shaders">
+    <Filter Include="stdafx">
+      <UniqueIdentifier>{eb6ce2af-eb73-4d61-8e54-77e00c9b78ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
       <UniqueIdentifier>{aa86e47f-445f-4440-9a76-173363b46c4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{2bc52bd1-3e11-452c-b646-6c2641a18905}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>stdafx</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="SimpleGame.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>stdafx</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\SolidRect.fs">
-      <Filter>소스 파일\Shaders</Filter>
+      <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\SolidRect.vs">
-      <Filter>소스 파일\Shaders</Filter>
+      <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>
