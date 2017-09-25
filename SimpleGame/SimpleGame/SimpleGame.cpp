@@ -24,7 +24,6 @@ void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
-
 	// Renderer Test	(위치x, 위치y, 위치z, 가로 세로 싸이즈, R, G, B, A)
 	//g_Renderer->DrawSolidRect(0, 0, 0, 100, 1, 0, 1, 1);
 	g_Renderer->DrawSolidRect(p_Obejct->Get_x(), 

@@ -1,11 +1,5 @@
 #pragma once
 
-#include "Dependencies\glew.h"
-#include <string>
-#include <cstdlib>
-#include <fstream>
-#include <iostream>
-
 class Object
 {
 private:
