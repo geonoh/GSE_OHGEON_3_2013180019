@@ -6,6 +6,11 @@ private:
 	float x, y, z;
 	float size;
 	float R, G, B, A;
+	// 실습3에 추가 (속도 벡터)
+	float v_x;
+	float v_y;
+	float v_z;
+	float speed;
 public:
 	Object(float x, float y, float z, float size, float R, float G, float B, float A);
 	Object();
@@ -19,6 +24,10 @@ public:
 	float Get_G();
 	float Get_B();
 	float Get_A();
+
+	void Set_velocity(float x, float y, float z, float i_speed);
+
+	void Update(float time);
 
 	~Object();
 

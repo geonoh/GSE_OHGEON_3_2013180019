@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Object.h"
-
+#include <iostream>
+using namespace std;
 
 Object::Object()
 {
@@ -47,4 +48,33 @@ float Object::Get_B() {
 }
 float Object::Get_A() {
 	return A;
+}
+
+void Object::Set_velocity(float x, float y, float z, float i_speed) {
+	v_x = x;
+	v_y = y;
+	v_z = z;
+	speed = i_speed;
+}
+
+void Object::Update(float time) {
+	// prev pos + direction*time
+	if (x > 250 || x < -250) {
+		cout << v_x << endl;
+		v_x = v_x*(-1);
+		x - 10;
+	}
+
+	x += v_x*speed;
+
+
+	//y += v_y*speed;
+	//z += v_z*speed;
+
+
+	// 커지고 작아지고
+	//if (size > 150)
+	//	size -= 0.01f;
+	//else if (size > 99)
+	//	size += 0.01;
 }
