@@ -17,7 +17,7 @@ but WITHOUT ANY WARRANTY.
 #include "Object.h"
 
 Renderer *g_Renderer = NULL;
-Object* p_Obejct = new Object(0.0f, 0.0f, 0.0f, 100.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+Object* p_Obejct = new Object(0.0f, 0.0f, 0.0f, 50.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 
 void RenderScene(void)
 {
@@ -29,8 +29,7 @@ void RenderScene(void)
 	// 업데이트 한번 해주고 렌더링을 해주자. 
 	// 즉 여기에서 업데이트를 한 번 해보자.
 	//std::cout << p_Obejct->Get_x() << std::endl;
-	p_Obejct->Set_velocity(1.f, 1.f, 0.f, 0.05f);
-	p_Obejct->Update(0.f);
+	p_Obejct->Update(1);
 
 	//std::cout << p_Obejct->Get_x() << ", " << p_Obejct->Get_y() << ", " << p_Obejct->Get_z() << std::endl;
 	g_Renderer->DrawSolidRect(p_Obejct->Get_x(), 
@@ -95,6 +94,8 @@ int main(int argc, char **argv)
 	{
 		std::cout << "Renderer could not be initialized.. \n";
 	}
+	// 오프젝트 초기화
+	p_Obejct->Set_velocity(1.f, 1.f, 0.f, 1.f);
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);

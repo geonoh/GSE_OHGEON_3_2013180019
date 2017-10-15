@@ -59,22 +59,24 @@ void Object::Set_velocity(float x, float y, float z, float i_speed) {
 
 void Object::Update(float time) {
 	// prev pos + direction*time
+	Sleep(time);
 	if (x > 250 || x < -250) {
-		cout << v_x << endl;
 		v_x = v_x*(-1);
-		x - 10;
+	}
+	if (y > 250 || y < -250) {
+		v_y = v_y*(-1);
 	}
 
 	x += v_x*speed;
+	y += v_y*speed;
+	if (size > 80)
+		is_size_up = false;
+	else if (size < 20)
+		is_size_up = true;
 
 
-	//y += v_y*speed;
-	//z += v_z*speed;
-
-
-	// 커지고 작아지고
-	//if (size > 150)
-	//	size -= 0.01f;
-	//else if (size > 99)
-	//	size += 0.01;
+	if (is_size_up)
+		size += 0.1;
+	else
+		size -= 0.1;
 }

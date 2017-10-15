@@ -5,6 +5,7 @@ class Object
 private:
 	float x, y, z;
 	float size;
+	bool is_size_up;
 	float R, G, B, A;
 	// 실습3에 추가 (속도 벡터)
 	float v_x;
