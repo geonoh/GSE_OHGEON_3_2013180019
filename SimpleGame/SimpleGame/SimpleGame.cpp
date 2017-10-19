@@ -15,9 +15,11 @@ but WITHOUT ANY WARRANTY.
 
 #include "Renderer.h"
 #include "Object.h"
+#include "SceneMgr.h"
 
 Renderer *g_Renderer = NULL;
-Object* p_Obejct = new Object(0.0f, 0.0f, 0.0f, 50.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+Object* p_Obejct = new Object(0.0f, 0.0f, 0.0f, 50.f / 2, 0.0f, 1.0f, 1.0f, 1.0f);
+SceneMgr* p_Scene = new SceneMgr;
 
 void RenderScene(void)
 {
@@ -30,8 +32,19 @@ void RenderScene(void)
 	// 즉 여기에서 업데이트를 한 번 해보자.
 	//std::cout << p_Obejct->Get_x() << std::endl;
 	p_Obejct->Update(1);
+	//p_Scene->m_objects[2]->
 
-	//std::cout << p_Obejct->Get_x() << ", " << p_Obejct->Get_y() << ", " << p_Obejct->Get_z() << std::endl;
+	p_Scene->Update();
+	p_Scene->CollideCheck();
+
+	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i) {
+		g_Renderer->DrawSolidRect(p_Scene->m_objects[i]->Get_x(),
+			p_Scene->m_objects[i]->Get_y(), p_Scene->m_objects[i]->Get_z(),
+			p_Scene->m_objects[i]->Get_size(), p_Scene->m_objects[i]->Get_R(),
+			p_Scene->m_objects[i]->Get_G(), p_Scene->m_objects[i]->Get_B(),
+			p_Scene->m_objects[i]->Get_A());
+	}
+
 	g_Renderer->DrawSolidRect(p_Obejct->Get_x(), 
 		p_Obejct->Get_y(), p_Obejct->Get_z(), p_Obejct->Get_size(), 
 		p_Obejct->Get_R(), p_Obejct->Get_G(), p_Obejct->Get_B(), p_Obejct->Get_A());
@@ -58,8 +71,9 @@ void MouseInput(int button, int state, int x, int y)
 
 void KeyInput(unsigned char key, int x, int y)
 {
-	if (key == 'q')
-		exit(0);
+	if (key == 'q') {
+		exit(1);
+	}
 	std::cout << "test" << std::endl;
 	RenderScene();
 }
@@ -107,7 +121,8 @@ int main(int argc, char **argv)
 
 	delete g_Renderer;
 	delete p_Obejct;
-
+	printf("삭제됨?\n");
+	delete p_Scene;
     return 0;
 }
 

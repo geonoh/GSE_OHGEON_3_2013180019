@@ -60,18 +60,17 @@ void Object::Set_velocity(float x, float y, float z, float i_speed) {
 void Object::Update(float time) {
 	// prev pos + direction*time
 	Sleep(time);
-	if (x > 250 || x < -250) {
+
+	if (x > 250 || x < -250) 
 		v_x = v_x*(-1);
-	}
-	if (y > 250 || y < -250) {
+	if (y > 250 || y < -250) 
 		v_y = v_y*(-1);
-	}
 
 	x += v_x*speed;
 	y += v_y*speed;
-	if (size > 80)
+	if (size > 15)
 		is_size_up = false;
-	else if (size < 20)
+	else if (size < 5)
 		is_size_up = true;
 
 
@@ -79,4 +78,11 @@ void Object::Update(float time) {
 		size += 0.1;
 	else
 		size -= 0.1;
+}
+
+void Object::SetRed() {
+	R = 1.0f;
+	G = 0.0f;
+	B = 0.0f;
+	A = 0.0f;
 }

@@ -26,8 +26,10 @@ public:
 	float Get_B();
 	float Get_A();
 
-	void Set_velocity(float x, float y, float z, float i_speed);
+	void SetRed();
 
+
+	void Set_velocity(float x, float y, float z, float i_speed);
 	void Update(float time);
 
 	~Object();
