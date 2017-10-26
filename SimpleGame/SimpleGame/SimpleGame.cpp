@@ -17,37 +17,23 @@ but WITHOUT ANY WARRANTY.
 #include "Object.h"
 #include "SceneMgr.h"
 
-Renderer *g_Renderer = NULL;
-Object* p_Obejct = new Object(0.0f, 0.0f, 0.0f, 50.f / 2, 0.0f, 1.0f, 1.0f, 1.0f);
-SceneMgr* p_Scene = new SceneMgr;
+SceneMgr* p_Scene;
+int click_count = 0;
 
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
-	// Renderer Test	(위치x, 위치y, 위치z, 가로 세로 싸이즈, R, G, B, A)
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	//g_Renderer->DrawSolidRect(0, 0, 0, 100, 1, 0, 1, 1);
 
 	// 업데이트 한번 해주고 렌더링을 해주자. 
 	// 즉 여기에서 업데이트를 한 번 해보자.
-	//std::cout << p_Obejct->Get_x() << std::endl;
-	p_Obejct->Update(1);
-	//p_Scene->m_objects[2]->
 
 	p_Scene->Update();
 	p_Scene->CollideCheck();
 
-	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i) {
-		g_Renderer->DrawSolidRect(p_Scene->m_objects[i]->Get_x(),
-			p_Scene->m_objects[i]->Get_y(), p_Scene->m_objects[i]->Get_z(),
-			p_Scene->m_objects[i]->Get_size(), p_Scene->m_objects[i]->Get_R(),
-			p_Scene->m_objects[i]->Get_G(), p_Scene->m_objects[i]->Get_B(),
-			p_Scene->m_objects[i]->Get_A());
-	}
-
-	g_Renderer->DrawSolidRect(p_Obejct->Get_x(), 
-		p_Obejct->Get_y(), p_Obejct->Get_z(), p_Obejct->Get_size(), 
-		p_Obejct->Get_R(), p_Obejct->Get_G(), p_Obejct->Get_B(), p_Obejct->Get_A());
+	// 렌더링
+	p_Scene->SceneRender();
 
 	glutSwapBuffers();
 }
@@ -62,9 +48,10 @@ void MouseInput(int button, int state, int x, int y)
 	if (button == GLUT_LEFT_BUTTON&&state == GLUT_DOWN) {
 		std::cout << "push_down : ";
 		std::cout << x << ", " << y << std::endl;
-		p_Obejct->Setter(x - 250.f, 250.f - y, p_Obejct->Get_z(), 
-			p_Obejct->Get_size(), p_Obejct->Get_R(), 
-			p_Obejct->Get_G(), p_Obejct->Get_B(), p_Obejct->Get_A());
+		p_Scene->MouseInput(x,y, click_count);
+		click_count++;
+		if (click_count == 10)
+			click_count = 0;
 	}
 	RenderScene();
 }
@@ -102,14 +89,7 @@ int main(int argc, char **argv)
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
 
-	// Initialize Renderer
-	g_Renderer = new Renderer(500, 500);
-	if (!g_Renderer->IsInitialized())
-	{
-		std::cout << "Renderer could not be initialized.. \n";
-	}
-	// 오프젝트 초기화
-	p_Obejct->Set_velocity(1.f, 1.f, 0.f, 1.f);
+	p_Scene = new SceneMgr(500, 500);
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
@@ -119,10 +99,8 @@ int main(int argc, char **argv)
 
 	glutMainLoop();
 
-	delete g_Renderer;
-	delete p_Obejct;
 	printf("삭제됨?\n");
 	delete p_Scene;
     return 0;
-}
+}	
 

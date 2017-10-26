@@ -12,6 +12,9 @@ private:
 	float v_y;
 	float v_z;
 	float speed;
+
+	// 실습 5 추가
+	float life;
 public:
 	Object(float x, float y, float z, float size, float R, float G, float B, float A);
 	Object();
@@ -27,7 +30,8 @@ public:
 	float Get_A();
 
 	void SetRed();
-
+	void SetLife(float num);
+	float GetLife();
 
 	void Set_velocity(float x, float y, float z, float i_speed);
 	void Update(float time);
