@@ -24,7 +24,7 @@ SceneMgr::SceneMgr(float x, float y )
 		);
 
 		m_objects[i]->Set_velocity(-1 + rand() % 2, -1 + rand() % 2
-			, -1 + rand() % 2, 0.1f);
+			, -1 + rand() % 2, MOVE_SPEED);
 	}
 	// 유저 오브젝트 초기화
 	//user_obejct = new Object(0.0f, 0.0f, 0.0f, 50.f / 2, 0.0f, 1.0f, 1.0f, 1.0f);
@@ -41,45 +41,57 @@ SceneMgr::~SceneMgr()
 }
 
 void SceneMgr::Update() {
-	long start_time;
+	DWORD start_time;
 	start_time = timeGetTime();
+
+	CollideCheck();
+
+
 	for (int i = 0; i < MAX_OBJECTS_COUNT; ++i) {
 		// 생명이 있을때만
 		if (m_objects[i]->GetLife() > 0) {
 			m_objects[i]->Update(0);
 		}
+		else {
+			//printf("%d의 오브젝트 체력 : %f\n", i, m_objects[i]->GetLife());
+		}
 	}
 }
 
 void SceneMgr::CollideCheck() {
-	float pre_min_x = 0.0f;
-	float pre_min_y = 0.0f;
-	float pre_max_x = 0.0f;
-	float pre_max_y = 0.0f;
+	float left_a = 0;
+	float right_a = 0;
+	float top_a = 0;
+	float bottom_a = 0;
 
-	float nex_min_x = 0.0f;
-	float nex_min_y = 0.0f;
-	float nex_max_x = 0.0f;
-	float nex_max_y = 0.0f;
 
+	float left_b = 0;
+	float right_b = 0;
+	float top_b = 0;
+	float bottom_b = 0;
 
 	for (int i = 0; i < MAX_OBJECTS_COUNT - 1; ++i) {
-		// MIN x,y  MAX x,y
-		pre_min_x = m_objects[i]->Get_x() - (m_objects[i]->Get_size() / 2);
-		pre_min_y = m_objects[i]->Get_y() - (m_objects[i]->Get_size() / 2);
-		pre_max_x = m_objects[i]->Get_x() + (m_objects[i]->Get_size() / 2);
-		pre_max_y = m_objects[i]->Get_y() + (m_objects[i]->Get_size() / 2);
+		left_a = m_objects[i]->Get_x() - m_objects[i]->Get_size() / 2;
+		right_a = m_objects[i]->Get_x() + m_objects[i]->Get_size() / 2;
+		bottom_a = m_objects[i]->Get_y() - m_objects[i]->Get_size() / 2;
+		top_a = m_objects[i]->Get_y() + m_objects[i]->Get_size() / 2;
 
+		left_b = m_objects[i + 1]->Get_x() - m_objects[i + 1]->Get_size() / 2;
+		right_b = m_objects[i + 1]->Get_x() + m_objects[i + 1]->Get_size() / 2;
+		bottom_b = m_objects[i + 1]->Get_y() - m_objects[i + 1]->Get_size() / 2;
+		top_b = m_objects[i + 1]->Get_y() + m_objects[i + 1]->Get_size() / 2;
 
-		if (((pre_min_x <= m_objects[i + 1]->Get_x()) && (m_objects[i + 1]->Get_x() <= pre_max_x)) &&	// x가 범위 안에 있고,
-			((pre_min_y <= m_objects[i + 1]->Get_y()) && (m_objects[i + 1]->Get_y() <= pre_max_y)))		// y가 범위 안에 있으면
-		{
-			m_objects[i]->SetRed();
-			m_objects[i + 1]->SetRed();
-			//printf("%d번과 %d번 충돌!\n", i, i + 1);
-			//Sleep(1000);
-		}
+		if (left_a > right_b)continue;
+		if (right_a < left_b)continue;
+		if (top_a < bottom_b)continue;
+		if (bottom_a > top_b)continue;
+
+		m_objects[i]->SetRed();
+		m_objects[i + 1]->SetRed();
+		printf("%d번과 %d번 충돌!\n", i, i + 1);
+
 	}
+
 }
 void SceneMgr::SceneRender(float x, float y, float z, float size, float r, float g, float b, float a) {
 	renderer->DrawSolidRect(x, y, z, size, r, g, b, a);
@@ -95,13 +107,6 @@ void SceneMgr::SceneRender() {
 				m_objects[i]->Get_A());
 		}
 	}
-	
-	// 유저 그리기
-	//renderer->DrawSolidRect(user_obejct->Get_x(),
-	//	user_obejct->Get_y(), user_obejct->Get_z(),
-	//	user_obejct->Get_size(), user_obejct->Get_R(),
-	//	user_obejct->Get_G(), user_obejct->Get_B(),
-	//	user_obejct->Get_A());
 }
 
 
@@ -109,7 +114,7 @@ void SceneMgr::MouseInput(int x, int y, int num) {
 	// 이때 새로 오브젝트를 추가 해준다.
 	m_objects[num]->Setter(x - 250.f, 250.f - y, 
 		0.0f, 20.0f, 1.f, 1.f, 1.f, 0.0f);
-	m_objects[num]->Set_velocity(rand() % 2 - 1, rand() % 2 - 1, 0, 0.1f);
+	m_objects[num]->Set_velocity(rand() % 2 - 1, rand() % 2 - 1, 0, MOVE_SPEED);
 
 
 	// 클릭하면 생명 10 받는다.

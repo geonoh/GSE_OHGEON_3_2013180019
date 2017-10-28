@@ -26,11 +26,9 @@ void RenderScene(void)
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	//g_Renderer->DrawSolidRect(0, 0, 0, 100, 1, 0, 1, 1);
 
-	// 업데이트 한번 해주고 렌더링을 해주자. 
-	// 즉 여기에서 업데이트를 한 번 해보자.
 
+	// 업데이트는 프레임당 1회. 즉 RendefScene이 호출될때 한 번이면 됨.
 	p_Scene->Update();
-	p_Scene->CollideCheck();
 
 	// 렌더링
 	p_Scene->SceneRender();

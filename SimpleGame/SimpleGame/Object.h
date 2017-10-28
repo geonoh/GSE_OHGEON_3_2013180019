@@ -29,7 +29,11 @@ public:
 	float Get_B();
 	float Get_A();
 
+	// 충돌하게 되면 SetRed
 	void SetRed();
+	bool is_collide;
+	void SetWhite();
+
 	void SetLife(float num);
 	float GetLife();
 

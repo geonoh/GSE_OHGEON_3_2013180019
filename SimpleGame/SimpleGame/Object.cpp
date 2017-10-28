@@ -66,29 +66,20 @@ void Object::Update(float time) {
 	//printf("%f\n", life);
 	if (life <= 0) {
 		printf("사망\n");
-		Setter(-200, -200, -200, 0, 0, 0, 0, 0);
+		//Setter(-200, -200, -200, 0, 0, 0, 0, 0);
 	}
 
-
+	// 벽에 충돌되면 해당 좌표축 방향벡터 *(-1)
 	if (x > 250 || x < -250) 
 		v_x = v_x*(-1);
 	if (y > 250 || y < -250) 
 		v_y = v_y*(-1);
-
+	
+	// Updated_Position = Prev + 속도 벡터 * 시간
 	x += v_x*speed;
 	y += v_y*speed;
-	//if (size > 15)
-	//	is_size_up = false;
-	//else if (size < 5)
-	//	is_size_up = true;
 
-
-	//if (is_size_up)
-	//	size += 0.1;
-	//else
-	//	size -= 0.1;
-
-	life -= 0.1;
+	life -= 0.05;
 }
 
 void Object::SetRed() {
@@ -99,8 +90,17 @@ void Object::SetRed() {
 }
 
 void Object::SetLife(float num) {
+	is_collide = true;
 	life = num;
 }
+
+void Object::SetWhite() {
+	R = 0.0f;
+	G = 0.0f;
+	B = 0.0f;
+	A = 0.0f;
+}
+
 
 float Object::GetLife() {
 	return life;
