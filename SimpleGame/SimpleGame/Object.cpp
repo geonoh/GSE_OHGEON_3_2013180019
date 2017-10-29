@@ -13,6 +13,7 @@ Object::~Object()
 }
 
 Object::Object(float x, float y, float z, float size, float R, float G, float B, float A) : x(x), y(y), z(z), size(size), R(R), G(G), B(B), A(A) {
+	is_collide = false;
 	//life = 10;
 }
 
@@ -63,11 +64,6 @@ void Object::Update(float time) {
 	// prev pos + direction*time
 	Sleep(time);
 
-	//printf("%f\n", life);
-	if (life <= 0) {
-		printf("사망\n");
-		//Setter(-200, -200, -200, 0, 0, 0, 0, 0);
-	}
 
 	// 벽에 충돌되면 해당 좌표축 방향벡터 *(-1)
 	if (x > 250 || x < -250) 
@@ -80,6 +76,7 @@ void Object::Update(float time) {
 	y += v_y*speed;
 
 	life -= 0.05;
+	printf("%f\n", life);
 }
 
 void Object::SetRed() {
@@ -87,10 +84,11 @@ void Object::SetRed() {
 	G = 0.0f;
 	B = 0.0f;
 	A = 0.0f;
+	is_collide = true;
 }
 
 void Object::SetLife(float num) {
-	is_collide = true;
+	is_collide = false;
 	life = num;
 }
 
@@ -99,6 +97,8 @@ void Object::SetWhite() {
 	G = 0.0f;
 	B = 0.0f;
 	A = 0.0f;
+	is_collide = false;
+
 }
 
 

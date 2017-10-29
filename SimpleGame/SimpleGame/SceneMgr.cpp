@@ -92,6 +92,38 @@ void SceneMgr::CollideCheck() {
 
 	}
 
+	// 충돌이 끝난물체는 다시 흰색으로
+	for (int i = 0; i < MAX_OBJECTS_COUNT - 1; ++i) {
+		left_a = m_objects[i]->Get_x() - m_objects[i]->Get_size() / 2;
+		right_a = m_objects[i]->Get_x() + m_objects[i]->Get_size() / 2;
+		bottom_a = m_objects[i]->Get_y() - m_objects[i]->Get_size() / 2;
+		top_a = m_objects[i]->Get_y() + m_objects[i]->Get_size() / 2;
+
+		left_b = m_objects[i + 1]->Get_x() - m_objects[i + 1]->Get_size() / 2;
+		right_b = m_objects[i + 1]->Get_x() + m_objects[i + 1]->Get_size() / 2;
+		bottom_b = m_objects[i + 1]->Get_y() - m_objects[i + 1]->Get_size() / 2;
+		top_b = m_objects[i + 1]->Get_y() + m_objects[i + 1]->Get_size() / 2;
+
+		if (m_objects[i]->is_collide) {
+			if (left_a > right_b) {
+				m_objects[i]->SetWhite();
+				m_objects[i + 1]->SetWhite();
+			}
+			if (right_a < left_b) {
+				m_objects[i]->SetWhite();
+				m_objects[i + 1]->SetWhite();
+			}
+			if (top_a < bottom_b) {
+				m_objects[i]->SetWhite();
+				m_objects[i + 1]->SetWhite();
+			}
+			if (bottom_a > top_b) {
+				m_objects[i]->SetWhite();
+				m_objects[i + 1]->SetWhite();
+			}
+		}
+	}
+
 }
 void SceneMgr::SceneRender(float x, float y, float z, float size, float r, float g, float b, float a) {
 	renderer->DrawSolidRect(x, y, z, size, r, g, b, a);
