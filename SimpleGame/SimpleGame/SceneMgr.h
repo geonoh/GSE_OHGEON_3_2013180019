@@ -4,13 +4,22 @@
 #include <time.h>
 #include <stdlib.h>
 #include <Windows.h>
+#include <vector>
+using namespace std;
 
-#define MAX_OBJECTS_COUNT 10
+#define MAX_OBJECTS_COUNT 100
+
+#define OBJECT_BUILDING		0
+#define OBJECT_CHARACTER	1
+#define OBJECT_BULLET		2
+#define OBJECT_ARROW		3
+
+
 
 class SceneMgr
 {
 	Renderer* renderer;
-	Object* m_objects[MAX_OBJECTS_COUNT];
+	vector<Object> m_objects;
 	//Object* user_obejct;
 public:
 	SceneMgr(float x,float y);

@@ -16,7 +16,11 @@ Object::Object(float x, float y, float z, float size, float R, float G, float B,
 	is_collide = false;
 	//life = 10;
 }
-
+Object::Object(float x, float y, float z, float size, float R, float G, float B, float A, float v_x, float v_y, float v_z, float i_speed)
+	: x(x), y(y), z(z), size(size), R(R), G(G), B(B), A(A), v_x(v_x),v_y(v_y),v_z(v_z),speed(i_speed)
+{
+	life = 100;
+}
 void Object::Setter(float in_x, float in_y, float in_z, float in_size, float in_R, float in_G, float in_B, float in_A) {
 	x = in_x;
 	y = in_y;
@@ -61,22 +65,19 @@ void Object::Set_velocity(float x, float y, float z, float i_speed) {
 }
 
 void Object::Update(float time) {
-	// prev pos + direction*time
-	Sleep(time);
+	if (life > 0) {
+		//Sleep(time);
 
+		// 벽에 충돌되면 해당 좌표축 방향벡터 *(-1)
+		if (x > 250 || x < -250)
+			v_x = v_x*(-1);
+		if (y > 250 || y < -250)
+			v_y = v_y*(-1);
 
-	// 벽에 충돌되면 해당 좌표축 방향벡터 *(-1)
-	if (x > 250 || x < -250) 
-		v_x = v_x*(-1);
-	if (y > 250 || y < -250) 
-		v_y = v_y*(-1);
-	
-	// Updated_Position = Prev + 속도 벡터 * 시간
-	x += v_x*speed;
-	y += v_y*speed;
-
-	life -= 0.05;
-	printf("%f\n", life);
+		// Updated_Position = Prev + 속도 벡터 * 시간
+		x += v_x*speed;
+		y += v_y*speed;
+	}
 }
 
 void Object::SetRed() {
@@ -93,10 +94,10 @@ void Object::SetLife(float num) {
 }
 
 void Object::SetWhite() {
-	R = 0.0f;
-	G = 0.0f;
+	R = 1.0f;
+	G = 1.0f;
 	B = 0.0f;
-	A = 0.0f;
+	A = 1.0f;
 	is_collide = false;
 
 }

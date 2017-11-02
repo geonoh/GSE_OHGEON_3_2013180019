@@ -6,4 +6,4 @@
 #include <tchar.h>
 #include <Windows.h>
 
-#define MOVE_SPEED 0.5f
+#define MOVE_SPEED 0.1f

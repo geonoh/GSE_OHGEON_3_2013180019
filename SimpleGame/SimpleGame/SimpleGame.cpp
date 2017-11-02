@@ -23,12 +23,11 @@ int click_count = 0;
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	//g_Renderer->DrawSolidRect(0, 0, 0, 100, 1, 0, 1, 1);
 
 
 	// 업데이트는 프레임당 1회. 즉 RendefScene이 호출될때 한 번이면 됨.
-	p_Scene->Update();
 
 	// 렌더링
 	p_Scene->SceneRender();
@@ -38,6 +37,8 @@ void RenderScene(void)
 
 void Idle(void)
 {
+	p_Scene->Update();
+
 	RenderScene();
 }
 
@@ -48,8 +49,13 @@ void MouseInput(int button, int state, int x, int y)
 		std::cout << x << ", " << y << std::endl;
 		p_Scene->MouseInput(x,y, click_count);
 		click_count++;
-		if (click_count == 10)
+		if (click_count == MAX_OBJECTS_COUNT) {
+			// 열번 클릭하게되면 화면에 있는 오브젝트를 모두 날리자.
+			std::cout << "clear" << std::endl;
+			p_Scene->MouseInput(x, y, click_count);
+
 			click_count = 0;
+		}
 	}
 	RenderScene();
 }

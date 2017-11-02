@@ -17,6 +17,8 @@ private:
 	float life;
 public:
 	Object(float x, float y, float z, float size, float R, float G, float B, float A);
+	Object(float x, float y, float z, float size, float R, float G, float B, float A, float v_x, float v_y, float v_z, float i_speed);
+
 	Object();
 
 	void Setter(float x, float y, float z, float size, float R, float G, float B, float A);
