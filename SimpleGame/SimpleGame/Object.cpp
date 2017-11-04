@@ -12,24 +12,9 @@ Object::~Object()
 {
 }
 
-Object::Object(float x, float y, float z, float size, float R, float G, float B, float A) : x(x), y(y), z(z), size(size), R(R), G(G), B(B), A(A) {
-	is_collide = false;
-	//life = 10;
-}
-Object::Object(float x, float y, float z, float size, float R, float G, float B, float A, float v_x, float v_y, float v_z, float i_speed)
-	: x(x), y(y), z(z), size(size), R(R), G(G), B(B), A(A), v_x(v_x),v_y(v_y),v_z(v_z),speed(i_speed)
+Object::Object(float x, float y, float z, float size, float R, float G, float B, float A, float v_x, float v_y, float v_z, float i_speed, int type,int life)
+	: x(x), y(y), z(z), size(size), R(R), G(G), B(B), A(A), v_x(v_x), v_y(v_y), v_z(v_z), speed(i_speed), type(type), life(life)
 {
-	life = 100;
-}
-void Object::Setter(float in_x, float in_y, float in_z, float in_size, float in_R, float in_G, float in_B, float in_A) {
-	x = in_x;
-	y = in_y;
-	z = in_z;
-	size = in_size;
-	R = in_R;
-	G = in_G;
-	B = in_B;
-	A = in_A;
 }
 
 float Object::Get_x() {
@@ -57,13 +42,6 @@ float Object::Get_A() {
 	return A;
 }
 
-void Object::Set_velocity(float x, float y, float z, float i_speed) {
-	v_x = x;
-	v_y = y;
-	v_z = z;
-	speed = i_speed;
-}
-
 void Object::Update(float time) {
 	if (life > 0) {
 		//Sleep(time);
@@ -78,30 +56,37 @@ void Object::Update(float time) {
 		x += v_x*speed;
 		y += v_y*speed;
 	}
+
+	// 오브젝트 충돌체크 되면 색상변경
+	if (is_collide) {
+		R = 1.0f;
+		G = 0.0f;
+		B = 0.0f;
+		A = 0.0f;
+		is_collide = false;
+	}
+	else {	// 충돌이 아니면
+		if (type == OBJECT_BUILDING) {
+			R = 1.0f;
+			G = 1.0f;
+			B = 0.0f;
+			A = 1.0f;
+		}
+		else if (type == OBJECT_CHARACTER) {
+			R = 1.0f;
+			G = 1.0f;
+			B = 1.0f;
+			A = 1.0f;
+		}
+	}
 }
 
-void Object::SetRed() {
-	R = 1.0f;
-	G = 0.0f;
-	B = 0.0f;
-	A = 0.0f;
-	is_collide = true;
-}
-
-void Object::SetLife(float num) {
-	is_collide = false;
+void Object::SetLife(int num) {
 	life = num;
 }
-
-void Object::SetWhite() {
-	R = 1.0f;
-	G = 1.0f;
-	B = 0.0f;
-	A = 1.0f;
-	is_collide = false;
-
+void Object::LostLife(int num) {
+	life -= num;
 }
-
 
 float Object::GetLife() {
 	return life;

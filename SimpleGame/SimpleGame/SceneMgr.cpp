@@ -12,20 +12,21 @@ SceneMgr::SceneMgr(float x, float y )
 		std::cout << "Renderer could not be initialized.. \n";
 	}
 
-	//m_objects.push_back(Object());
 
+	// 디폴트 빌딩 생성해주기.
+	m_objects.push_back(Object(0.f, 0.f, 0.f,
+		50.0f, 1.f, 1.f, 0.f, 1.f,
+		0.f, 0.f, 0.f, 0.f,
+		OBJECT_BUILDING, 500));
 	srand((unsigned)time(NULL));
 
 
-	//AddActorObject(100, 100, OBJECT_BUILDING);
-
+ 
 }
 
 
 SceneMgr::~SceneMgr()
 {
-	printf("소멸스\n");
-	//delete[] m_objects;
 	m_objects.clear();
 	delete renderer;
 }
@@ -60,72 +61,68 @@ void SceneMgr::CollideCheck() {
 	float top_b = 0;
 	float bottom_b = 0;
 
-	if (m_objects.size() > 0) {
+	// vector에 object가 있을때만 충돌체크가 가능하게 프로그램함.
+	if (m_objects.size() > 0) {			
 		for (int i = 0; i < m_objects.size() - 1; ++i) {
-			if ((m_objects[i].GetLife() > 0) && (m_objects[i + 1].GetLife() > 0)) {
-				left_a = m_objects[i].Get_x() - m_objects[i].Get_size() / 2;
-				right_a = m_objects[i].Get_x() + m_objects[i].Get_size() / 2;
-				bottom_a = m_objects[i].Get_y() - m_objects[i].Get_size() / 2;
-				top_a = m_objects[i].Get_y() + m_objects[i].Get_size() / 2;
+			for (int j = i + 1; j < m_objects.size(); ++j) {
+				if ((m_objects[i].GetLife() > 0) && (m_objects[j].GetLife() > 0)) {
+					left_a = m_objects[i].Get_x() - m_objects[i].Get_size() / 2;
+					right_a = m_objects[i].Get_x() + m_objects[i].Get_size() / 2;
+					bottom_a = m_objects[i].Get_y() - m_objects[i].Get_size() / 2;
+					top_a = m_objects[i].Get_y() + m_objects[i].Get_size() / 2;
 
-				left_b = m_objects[i + 1].Get_x() - m_objects[i + 1].Get_size() / 2;
-				right_b = m_objects[i + 1].Get_x() + m_objects[i + 1].Get_size() / 2;
-				bottom_b = m_objects[i + 1].Get_y() - m_objects[i + 1].Get_size() / 2;
-				top_b = m_objects[i + 1].Get_y() + m_objects[i + 1].Get_size() / 2;
+					left_b = m_objects[j].Get_x() - m_objects[j].Get_size() / 2;
+					right_b = m_objects[j].Get_x() + m_objects[j].Get_size() / 2;
+					bottom_b = m_objects[j].Get_y() - m_objects[j].Get_size() / 2;
+					top_b = m_objects[j].Get_y() + m_objects[j].Get_size() / 2;
 
-				if (left_a > right_b)continue;
-				if (right_a < left_b)continue;
-				if (top_a < bottom_b)continue;
-				if (bottom_a > top_b)continue;
+					if (left_a > right_b)continue;
+					if (right_a < left_b)continue;
+					if (top_a < bottom_b)continue;
+					if (bottom_a > top_b)continue;
 
-				m_objects[i].SetRed();
-				m_objects[i + 1].SetRed();
-				//printf("%d번과 %d번 충돌!\n", i, i + 1);
-			}
-		}
-	}
+					if (m_objects[i].type == OBJECT_CHARACTER && m_objects[j].type == OBJECT_CHARACTER) {
+						// 캐릭터와 캐릭터일 경우
+						// 충돌해도 데미지 없음.
+					}
+					else if (m_objects[i].type == OBJECT_CHARACTER && m_objects[j].type == OBJECT_BUILDING) {
+						// 캐릭터와 빌딩 충돌하게되면
 
 
-	// 충돌이 끝난물체는 다시 흰색으로
-	if (m_objects.size() > 0) {
-		for (int i = 0; i < m_objects.size() - 1; ++i) {
-			left_a = m_objects[i].Get_x() - m_objects[i].Get_size() / 2;
-			right_a = m_objects[i].Get_x() + m_objects[i].Get_size() / 2;
-			bottom_a = m_objects[i].Get_y() - m_objects[i].Get_size() / 2;
-			top_a = m_objects[i].Get_y() + m_objects[i].Get_size() / 2;
+						// 빌딩의 라이프 - 캐릭터 라이프
+						m_objects[j].is_collide = true;
+						m_objects[j].LostLife(m_objects[i].GetLife());
+						std::cout << " : 보스체력임 ::" << m_objects[j].GetLife() << std::endl;
+						// 캐릭터 소멸
+						m_objects[i].is_collide = true;
+						m_objects[i].SetLife(0);
+					}
+					else if (m_objects[i].type == OBJECT_BUILDING && m_objects[j].type == OBJECT_CHARACTER) {
+						// 빌딩, 캐릭터 충돌하게되면
+						
+						// 빌딩의 라이프 - 캐릭터 라이프
+						m_objects[i].is_collide = true;
+						m_objects[i].LostLife(m_objects[j].GetLife());
+						std::cout << " : 보스체력임 ::" << m_objects[i].GetLife() << std::endl;
 
-			left_b = m_objects[i + 1].Get_x() - m_objects[i + 1].Get_size() / 2;
-			right_b = m_objects[i + 1].Get_x() + m_objects[i + 1].Get_size() / 2;
-			bottom_b = m_objects[i + 1].Get_y() - m_objects[i + 1].Get_size() / 2;
-			top_b = m_objects[i + 1].Get_y() + m_objects[i + 1].Get_size() / 2;
-
-			if (m_objects[i].is_collide) {
-				if (left_a > right_b) {
-					m_objects[i].SetWhite();
-					m_objects[i + 1].SetWhite();
-				}
-				if (right_a < left_b) {
-					m_objects[i].SetWhite();
-					m_objects[i + 1].SetWhite();
-				}
-				if (top_a < bottom_b) {
-					m_objects[i].SetWhite();
-					m_objects[i + 1].SetWhite();
-				}
-				if (bottom_a > top_b) {
-					m_objects[i].SetWhite();
-					m_objects[i + 1].SetWhite();
+						// 캐릭터 소멸
+						m_objects[j].is_collide = true;
+						m_objects[j].SetLife(0);
+						// vector erase 해주고싶은데...
+						m_objects.erase(m_objects.begin() + j);
+						// 오 된다!!!!!!!!!!!!!!!!!!!
+					}
 				}
 			}
 		}
+
 	}
 }
-void SceneMgr::SceneRender(float x, float y, float z, float size, float r, float g, float b, float a) {
-	renderer->DrawSolidRect(x, y, z, size, r, g, b, a);
-}
+
+
 void SceneMgr::SceneRender() {
-	// 배경들 움직여버리기
-	for (int i = 0; i < m_objects.size(); ++i) {\
+	for (int i = 0; i < m_objects.size(); ++i) {
+		// 생명이 있을경우에만 그린다. 
 		if (m_objects[i].GetLife() > 0) {
 			renderer->DrawSolidRect(m_objects[i].Get_x(),
 				m_objects[i].Get_y(), m_objects[i].Get_z(),
@@ -137,16 +134,17 @@ void SceneMgr::SceneRender() {
 }
 
 
-void SceneMgr::MouseInput(int x, int y, int num) {
-	if (num == MAX_OBJECTS_COUNT) {
-		m_objects.clear();
-		/*for (int i = 0; i < MAX_OBJECTS_COUNT; ++i) {
-			m_objects[i].SetLife(0);
-		}*/
-		return;
+void SceneMgr::MouseInput(int x, int y, int object_type) {
+	if (m_objects.size() >= MAX_OBJECTS_COUNT) {
+		std::cout << "Too much object" << std::endl;
 	}
-
-	m_objects.push_back(Object(x - 250.f, 250.f - y,
-		0.0f, 20.0f, 0.f, 1.f, 1.f, 1.0f,
-		rand() % 3 - 2, rand() % 3 - 2, 0.0f, MOVE_SPEED));
+	// 빌딩
+	else {
+		if (object_type == OBJECT_CHARACTER) {
+			m_objects.push_back(Object(x - 250.f, 250.f - y,
+				0.0f, 10.0f, 0.f, 0.f, 0.f, 0.0f,
+				rand() % 3 - 2, rand() % 3 - 2, 0.0f,
+				MOVE_SPEED, OBJECT_CHARACTER, 10));
+		}
+	}
 }

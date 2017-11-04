@@ -17,19 +17,23 @@ but WITHOUT ANY WARRANTY.
 #include "Object.h"
 #include "SceneMgr.h"
 
-SceneMgr* p_Scene;
+SceneMgr* p_Scene = nullptr;
 int click_count = 0;
+
+bool left_button_down = false;
+
 
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	//g_Renderer->DrawSolidRect(0, 0, 0, 100, 1, 0, 1, 1);
 
 
 	// 업데이트는 프레임당 1회. 즉 RendefScene이 호출될때 한 번이면 됨.
 
 	// 렌더링
+	p_Scene->Update();
 	p_Scene->SceneRender();
 
 	glutSwapBuffers();
@@ -37,28 +41,30 @@ void RenderScene(void)
 
 void Idle(void)
 {
-	p_Scene->Update();
 
 	RenderScene();
 }
 
+// 클릭하고 땠을 때 
 void MouseInput(int button, int state, int x, int y)
 {
 	if (button == GLUT_LEFT_BUTTON&&state == GLUT_DOWN) {
-		std::cout << "push_down : ";
-		std::cout << x << ", " << y << std::endl;
-		p_Scene->MouseInput(x,y, click_count);
-		click_count++;
-		if (click_count == MAX_OBJECTS_COUNT) {
-			// 열번 클릭하게되면 화면에 있는 오브젝트를 모두 날리자.
-			std::cout << "clear" << std::endl;
-			p_Scene->MouseInput(x, y, click_count);
+		left_button_down = true;
+	}
 
-			click_count = 0;
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
+		if (left_button_down) {		// 클릭됨.
+			p_Scene->MouseInput(x, y, OBJECT_CHARACTER);
 		}
+		left_button_down = false;
 	}
 	RenderScene();
 }
+
+void MotionInput(int x, int y) {		// 교수님 코드 참조
+
+}
+
 
 void KeyInput(unsigned char key, int x, int y)
 {
@@ -98,12 +104,13 @@ int main(int argc, char **argv)
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
 	glutKeyboardFunc(KeyInput);
+
+	glutMotionFunc(MotionInput);	// 교수님 코드 참조
 	glutMouseFunc(MouseInput);
 	glutSpecialFunc(SpecialKeyInput);
 
 	glutMainLoop();
 
-	printf("삭제됨?\n");
 	delete p_Scene;
     return 0;
 }	

@@ -7,21 +7,25 @@ private:
 	float size;
 	bool is_size_up;
 	float R, G, B, A;
-	// 실습3에 추가 (속도 벡터)
+
+	// 속도 백터 관련
 	float v_x;
 	float v_y;
 	float v_z;
 	float speed;
 
-	// 실습 5 추가
-	float life;
+	int life;
 public:
-	Object(float x, float y, float z, float size, float R, float G, float B, float A);
-	Object(float x, float y, float z, float size, float R, float G, float B, float A, float v_x, float v_y, float v_z, float i_speed);
+
+	// 충돌관련 함수
+	bool is_collide;
+
+	// 오브젝트 타입
+	int type;
 
 	Object();
+	Object(float x, float y, float z, float size, float R, float G, float B, float A, float v_x, float v_y, float v_z, float i_speed, int type, int life);
 
-	void Setter(float x, float y, float z, float size, float R, float G, float B, float A);
 	float Get_x();
 	float Get_y();
 	float Get_z();
@@ -31,15 +35,10 @@ public:
 	float Get_B();
 	float Get_A();
 
-	// 충돌하게 되면 SetRed
-	void SetRed();
-	bool is_collide;
-	void SetWhite();
-
-	void SetLife(float num);
+	void SetLife(int num);
+	void LostLife(int num);
 	float GetLife();
 
-	void Set_velocity(float x, float y, float z, float i_speed);
 	void Update(float time);
 
 	~Object();
