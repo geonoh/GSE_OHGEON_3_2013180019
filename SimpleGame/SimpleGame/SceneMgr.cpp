@@ -46,7 +46,7 @@ void SceneMgr::Update() {
 			is_shooting = true;
 			// 총알을 여기서 push_back 해준다.
 			m_objects.push_back(Object(m_objects[0].Get_x(), m_objects[0].Get_y(), m_objects[0].Get_z(),
-				20.f, 1.f, 0.f, 0.f, 1.f,
+				2.f, 1.f, 0.f, 0.f, 1.f,
 				rand() % 3 - 2, rand() % 3 - 2, 0.0f,
 				0.01f, OBJECT_BULLET,20
 				));
