@@ -53,6 +53,8 @@ void MouseInput(int button, int state, int x, int y)
 	}
 
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
+
+		// 좌 클릭 후 떼면 캐릭터 오브젝트 소환
 		if (left_button_down) {		// 클릭됨.
 			p_Scene->MouseInput(x, y, OBJECT_CHARACTER);
 		}

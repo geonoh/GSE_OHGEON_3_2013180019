@@ -3,6 +3,7 @@
 #include <iostream>
 using namespace std;
 
+
 Object::Object()
 {
 	//life = 10;
@@ -79,6 +80,15 @@ void Object::Update(float time) {
 			A = 1.0f;
 		}
 	}
+
+	// 빌딩오브젝트는 0.5초마다 총알을 발사해야한다.
+}
+
+void Object::ShootBullet(DWORD time) {
+	if (type == OBJECT_BUILDING) {
+
+	}
+
 }
 
 void Object::SetLife(int num) {

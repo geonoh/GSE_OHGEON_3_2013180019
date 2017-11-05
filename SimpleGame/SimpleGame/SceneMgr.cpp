@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SceneMgr.h"
 
+float start_time;
 
 SceneMgr::SceneMgr(float x, float y )
 {	
@@ -32,19 +33,44 @@ SceneMgr::~SceneMgr()
 }
 
 void SceneMgr::Update() {
-	/*DWORD start_time;
-	start_time = timeGetTime();*/
+	// 시간 제기 시작.
+	if (is_clocking) {
+		start_time = timeGetTime() / 1000;
+		is_clocking = false;
+	}
+
+
+	// 시작시간 체크하고 500ms 즉 0.5초가 경과함.
+	if (is_clocking == false) {
+		if (start_time + 2.f <= timeGetTime() / 1000) {
+			is_shooting = true;
+			// 총알을 여기서 push_back 해준다.
+			m_objects.push_back(Object(m_objects[0].Get_x(), m_objects[0].Get_y(), m_objects[0].Get_z(),
+				20.f, 1.f, 0.f, 0.f, 1.f,
+				rand() % 3 - 2, rand() % 3 - 2, 0.0f,
+				0.01f, OBJECT_BULLET,20
+				));
+
+			std::cout << "발사" << std::endl;
+			is_clocking = true;
+		}
+	}
 
 	CollideCheck();
 
+	if (is_shooting == false) {
+
+	}
 
 	for (int i = 0; i < m_objects.size(); ++i) {
 		// 생명이 있을때만
 		if (m_objects[i].GetLife() > 0) {
 			m_objects[i].Update(0);
 		}
-		else {
-			//printf("%d의 오브젝트 체력 : %f\n", i, m_objects[i]->GetLife());
+		else {	// 생명이 없으면 삭제해준다.
+			std::cout << i << "번째 오브젝트 삭제, 오브젝트type은 " << m_objects[i].type << "이다." << std::endl;
+			m_objects.erase(m_objects.begin() + i);
+
 		}
 	}
 }
@@ -92,10 +118,11 @@ void SceneMgr::CollideCheck() {
 						// 빌딩의 라이프 - 캐릭터 라이프
 						m_objects[j].is_collide = true;
 						m_objects[j].LostLife(m_objects[i].GetLife());
-						std::cout << " : 보스체력임 ::" << m_objects[j].GetLife() << std::endl;
+						std::cout << " : 보스체력 ::" << m_objects[j].GetLife() << std::endl;
 						// 캐릭터 소멸
 						m_objects[i].is_collide = true;
 						m_objects[i].SetLife(0);
+						m_objects.erase(m_objects.begin() + i);
 					}
 					else if (m_objects[i].type == OBJECT_BUILDING && m_objects[j].type == OBJECT_CHARACTER) {
 						// 빌딩, 캐릭터 충돌하게되면
@@ -103,7 +130,7 @@ void SceneMgr::CollideCheck() {
 						// 빌딩의 라이프 - 캐릭터 라이프
 						m_objects[i].is_collide = true;
 						m_objects[i].LostLife(m_objects[j].GetLife());
-						std::cout << " : 보스체력임 ::" << m_objects[i].GetLife() << std::endl;
+						std::cout << " : 보스체력 ::" << m_objects[i].GetLife() << std::endl;
 
 						// 캐릭터 소멸
 						m_objects[j].is_collide = true;
@@ -111,6 +138,27 @@ void SceneMgr::CollideCheck() {
 						// vector erase 해주고싶은데...
 						m_objects.erase(m_objects.begin() + j);
 						// 오 된다!!!!!!!!!!!!!!!!!!!
+					}
+					
+					// 총알의 충돌체크 해줘야함.
+					else if (m_objects[i].type == OBJECT_CHARACTER && m_objects[j].type == OBJECT_BULLET) {
+						// 캐릭터 충돌함.
+						m_objects[i].is_collide == true;
+						m_objects[i].SetLife(m_objects[i].GetLife() - m_objects[j].GetLife());
+
+						// 총알은 닿으면 그냥 erase
+						m_objects[j].is_collide == true;
+						m_objects.erase(m_objects.begin() + j);
+					}
+
+					else if (m_objects[i].type == OBJECT_BULLET && m_objects[j].type == OBJECT_CHARACTER) {
+						// 캐릭터 충돌함.
+						m_objects[j].is_collide == true;
+						m_objects[j].SetLife(m_objects[j].GetLife() - m_objects[i].GetLife());
+
+						// 총알은 닿으면 그냥 erase
+						m_objects[i].is_collide == true;
+						m_objects.erase(m_objects.begin() + i);
 					}
 				}
 			}
@@ -135,10 +183,20 @@ void SceneMgr::SceneRender() {
 
 
 void SceneMgr::MouseInput(int x, int y, int object_type) {
-	if (m_objects.size() >= MAX_OBJECTS_COUNT) {
+	int num_of_character = 0;
+	// 캐릭터 오브젝트의 수를 업데이트한다.
+	if (m_objects.size() > 0) {
+		for (int i = 0; i < m_objects.size(); ++i) {
+			if (m_objects[i].type == OBJECT_CHARACTER)
+				num_of_character++;
+		}
+	}
+
+
+	if (num_of_character > MAX_OBJECTS_COUNT) {
 		std::cout << "Too much object" << std::endl;
 	}
-	// 빌딩
+	// 클릭했을 때 소환되는 오브젝트는 나중에 따로 입력받을 수 있게 한다. 
 	else {
 		if (object_type == OBJECT_CHARACTER) {
 			m_objects.push_back(Object(x - 250.f, 250.f - y,

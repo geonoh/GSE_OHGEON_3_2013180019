@@ -13,6 +13,8 @@ class SceneMgr
 	Renderer* renderer;
 	vector<Object> m_objects;
 public:
+	bool is_shooting = false;
+	bool is_clocking = true;
 	SceneMgr(float x,float y);
 	~SceneMgr();
 	void Update();
