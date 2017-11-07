@@ -2,11 +2,11 @@
 #include "SceneMgr.h"
 
 float start_time;
-
+int number = 0;
 SceneMgr::SceneMgr(float x, float y )
 {	
 	// Initialize Renderer
-
+	srand((unsigned)time(NULL));
 	renderer = new Renderer(x, y);
 	if (!renderer->IsInitialized())
 	{
@@ -32,7 +32,10 @@ SceneMgr::~SceneMgr()
 	delete renderer;
 }
 
-void SceneMgr::Update() {
+void SceneMgr::Update(float elapsed_time) {
+	float elapsed_time_in_sec = elapsed_time / 1000.f;
+
+
 	// 시간 제기 시작.
 	if (is_clocking) {
 		start_time = timeGetTime() / 1000;
@@ -42,30 +45,26 @@ void SceneMgr::Update() {
 
 	// 시작시간 체크하고 500ms 즉 0.5초가 경과함.
 	if (is_clocking == false) {
-		if (start_time + 2.f <= timeGetTime() / 1000) {
+		if (start_time + 0.1f <= timeGetTime() / 1000) {
 			is_shooting = true;
 			// 총알을 여기서 push_back 해준다.
 			m_objects.push_back(Object(m_objects[0].Get_x(), m_objects[0].Get_y(), m_objects[0].Get_z(),
 				2.f, 1.f, 0.f, 0.f, 1.f,
-				rand() % 3 - 2, rand() % 3 - 2, 0.0f,
+				rand() % 16 - 16, rand() % 16 - 16, 0.0f,
 				0.01f, OBJECT_BULLET,20
 				));
-
-			std::cout << "발사" << std::endl;
+			number++;
+			std::cout << "발사 : " << start_time << " 갯수 : " << number << std::endl;
 			is_clocking = true;
 		}
 	}
 
 	CollideCheck();
 
-	if (is_shooting == false) {
-
-	}
-
 	for (int i = 0; i < m_objects.size(); ++i) {
 		// 생명이 있을때만
 		if (m_objects[i].GetLife() > 0) {
-			m_objects[i].Update(0);
+			m_objects[i].Update(elapsed_time_in_sec);
 		}
 		else {	// 생명이 없으면 삭제해준다.
 			std::cout << i << "번째 오브젝트 삭제, 오브젝트type은 " << m_objects[i].type << "이다." << std::endl;
@@ -201,7 +200,7 @@ void SceneMgr::MouseInput(int x, int y, int object_type) {
 		if (object_type == OBJECT_CHARACTER) {
 			m_objects.push_back(Object(x - 250.f, 250.f - y,
 				0.0f, 10.0f, 0.f, 0.f, 0.f, 0.0f,
-				rand() % 3 - 2, rand() % 3 - 2, 0.0f,
+				rand() % 16 - 16, rand() % 16 - 16, 0.0f,
 				MOVE_SPEED, OBJECT_CHARACTER, 10));
 		}
 	}

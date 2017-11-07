@@ -37,7 +37,6 @@ public:
 
 	void SetLife(int num);
 	void LostLife(int num);
-	void ShootBullet(DWORD time);
 	float GetLife();
 
 	void Update(float time);

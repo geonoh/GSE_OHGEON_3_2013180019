@@ -22,6 +22,7 @@ int click_count = 0;
 
 bool left_button_down = false;
 
+DWORD previous_time = 0;
 
 void RenderScene(void)
 {
@@ -31,9 +32,12 @@ void RenderScene(void)
 
 
 	// 업데이트는 프레임당 1회. 즉 RendefScene이 호출될때 한 번이면 됨.
+	DWORD current_time = timeGetTime();
+	DWORD elapsed_time = current_time - previous_time;
+	previous_time = current_time;
 
 	// 렌더링
-	p_Scene->Update();
+	p_Scene->Update((float)elapsed_time);
 	p_Scene->SceneRender();
 
 	glutSwapBuffers();

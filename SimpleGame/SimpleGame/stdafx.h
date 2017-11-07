@@ -6,7 +6,7 @@
 #include <tchar.h>
 #include <Windows.h>
 
-#define MOVE_SPEED			0.1f
+#define MOVE_SPEED			0.01f
 #define MAX_OBJECTS_COUNT	10
 #define OBJECT_BUILDING		0
 #define OBJECT_CHARACTER	1

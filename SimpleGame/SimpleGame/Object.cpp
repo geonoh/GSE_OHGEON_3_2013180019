@@ -44,19 +44,15 @@ float Object::Get_A() {
 }
 
 void Object::Update(float time) {
-	if (life > 0) {
-		//Sleep(time);
+	// 벽에 충돌되면 해당 좌표축 방향벡터 *(-1)
+	if (x > 250 || x < -250)
+		v_x = v_x*(-1);
+	if (y > 250 || y < -250)
+		v_y = v_y*(-1);
 
-		// 벽에 충돌되면 해당 좌표축 방향벡터 *(-1)
-		if (x > 250 || x < -250)
-			v_x = v_x*(-1);
-		if (y > 250 || y < -250)
-			v_y = v_y*(-1);
-
-		// Updated_Position = Prev + 속도 벡터 * 시간
-		x += v_x*speed;
-		y += v_y*speed;
-	}
+	// Updated_Position = Prev + 속도 벡터 * 시간
+	x += v_x*time;
+	y += v_y*time;
 
 	// 오브젝트 충돌체크 되면 색상변경
 	if (is_collide) {
@@ -82,13 +78,6 @@ void Object::Update(float time) {
 	}
 
 	// 빌딩오브젝트는 0.5초마다 총알을 발사해야한다.
-}
-
-void Object::ShootBullet(DWORD time) {
-	if (type == OBJECT_BUILDING) {
-
-	}
-
 }
 
 void Object::SetLife(int num) {

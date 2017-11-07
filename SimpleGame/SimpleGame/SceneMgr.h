@@ -17,7 +17,7 @@ public:
 	bool is_clocking = true;
 	SceneMgr(float x,float y);
 	~SceneMgr();
-	void Update();
+	void Update(float elapsed_time);
 	void CollideCheck();
 	void MouseInput(int x, int y, int object_type);
 	void SceneRender();
