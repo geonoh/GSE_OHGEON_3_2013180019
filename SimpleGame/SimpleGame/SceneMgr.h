@@ -14,7 +14,7 @@ class SceneMgr
 	vector<Object> m_objects;
 public:
 	bool is_shooting = false;
-	bool is_clocking = true;
+	bool is_clocking = false;
 	SceneMgr(float x,float y);
 	~SceneMgr();
 	void Update(float elapsed_time);

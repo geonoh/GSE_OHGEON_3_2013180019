@@ -13,8 +13,8 @@ Object::~Object()
 {
 }
 
-Object::Object(float x, float y, float z, float size, float R, float G, float B, float A, float v_x, float v_y, float v_z, float i_speed, int type,int life)
-	: x(x), y(y), z(z), size(size), R(R), G(G), B(B), A(A), v_x(v_x), v_y(v_y), v_z(v_z), speed(i_speed), type(type), life(life)
+Object::Object(float x, float y, float z, float size, float R, float G, float B, float A, float v_x, float v_y, float v_z, float i_speed, int type,int life,float life_time)
+	: x(x), y(y), z(z), size(size), R(R), G(G), B(B), A(A), v_x(v_x), v_y(v_y), v_z(v_z), speed(i_speed), type(type), life(life), life_time(life_time)
 {
 }
 
@@ -89,4 +89,11 @@ void Object::LostLife(int num) {
 
 float Object::GetLife() {
 	return life;
+}
+
+float Object::GetLifeTime() {
+	return life_time;
+}
+void Object::SetLifeTime(float input_life_time) {
+	life_time = input_life_time;
 }

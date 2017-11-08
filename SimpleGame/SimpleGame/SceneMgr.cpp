@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "SceneMgr.h"
 
-float start_time;
 int number = 0;
+float start_time = 0.0f;
+
 SceneMgr::SceneMgr(float x, float y )
 {	
 	// Initialize Renderer
@@ -18,7 +19,7 @@ SceneMgr::SceneMgr(float x, float y )
 	m_objects.push_back(Object(0.f, 0.f, 0.f,
 		50.0f, 1.f, 1.f, 0.f, 1.f,
 		0.f, 0.f, 0.f, 0.f,
-		OBJECT_BUILDING, 500));
+		OBJECT_BUILDING, 500, LIFETIME_ULTIMATE));
 	srand((unsigned)time(NULL));
 
 
@@ -36,31 +37,51 @@ void SceneMgr::Update(float elapsed_time) {
 	float elapsed_time_in_sec = elapsed_time / 1000.f;
 
 
-	// 시간 제기 시작.
+	// 시간 측정 시작
 	if (is_clocking) {
-		start_time = timeGetTime() / 1000;
-		is_clocking = false;
+		start_time += elapsed_time_in_sec;
+		if (start_time >= 0.5f) {	// 0.5초가 넘어가면 clocking 중지하고, Bullet push back.
+			is_clocking = false;
+			start_time = 0.f;
+		}
 	}
 
 
-	// 시작시간 체크하고 500ms 즉 0.5초가 경과함.
 	if (is_clocking == false) {
-		if (start_time + 0.1f <= timeGetTime() / 1000) {
+		//if (start_time + 0.1f <= timeGetTime() / 1000) {
 			is_shooting = true;
 			// 총알을 여기서 push_back 해준다.
 			m_objects.push_back(Object(m_objects[0].Get_x(), m_objects[0].Get_y(), m_objects[0].Get_z(),
 				2.f, 1.f, 0.f, 0.f, 1.f,
-				rand() % 16 - 16, rand() % 16 - 16, 0.0f,
-				0.01f, OBJECT_BULLET,20
+				// 교수님 랜덤방식 참조
+				SPEED_BULLET * ((float)std::rand() / (float)RAND_MAX) - 0.5f, SPEED_BULLET * ((float)std::rand() / (float)RAND_MAX) - 0.5f, 0.0f,
+				0.01f, OBJECT_BULLET,20, LIFETIME_BULLET
 				));
 			number++;
-			std::cout << "발사 : " << start_time << " 갯수 : " << number << std::endl;
+			std::cout << "발사 !" << " 갯수 : " << number << std::endl;
 			is_clocking = true;
+		//}
+	}
+
+	// 시간에 따라 생명 소진
+	for (int i = 0; i < m_objects.size(); ++i) {
+		// 체력 무한이면 삭제 X
+		if (m_objects[i].GetLifeTime() == LIFETIME_ULTIMATE)
+			continue;
+		m_objects[i].SetLifeTime(m_objects[i].GetLifeTime() - elapsed_time_in_sec);
+		// object의 LifeTime보다 start_life_time이 더 크게되면
+		if (m_objects[i].GetLifeTime() < 0.f) {
+			// 해당 object 삭제.
+			std::cout << i << "번쨰 오브젝트 life time :" << m_objects[i].GetLifeTime() << std::endl;
+			m_objects.erase(m_objects.begin() + i);
 		}
 	}
 
+
 	CollideCheck();
 
+
+	// 생명 다 소진한 Object 삭제해주는 부분.
 	for (int i = 0; i < m_objects.size(); ++i) {
 		// 생명이 있을때만
 		if (m_objects[i].GetLife() > 0) {
@@ -72,6 +93,7 @@ void SceneMgr::Update(float elapsed_time) {
 
 		}
 	}
+
 }
 
 void SceneMgr::CollideCheck() {
@@ -200,8 +222,9 @@ void SceneMgr::MouseInput(int x, int y, int object_type) {
 		if (object_type == OBJECT_CHARACTER) {
 			m_objects.push_back(Object(x - 250.f, 250.f - y,
 				0.0f, 10.0f, 0.f, 0.f, 0.f, 0.0f,
-				rand() % 16 - 16, rand() % 16 - 16, 0.0f,
-				MOVE_SPEED, OBJECT_CHARACTER, 10));
+				// 교수님 랜덤방식 참조
+				SPEED_CHARACTER*((float)std::rand() / (float)RAND_MAX) - 0.5f, SPEED_CHARACTER*((float)std::rand() / (float)RAND_MAX) - 0.5f, 0.0f,
+				MOVE_SPEED, OBJECT_CHARACTER, 10, LIFETIME_CHARACTER));
 		}
 	}
 }
