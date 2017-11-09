@@ -54,29 +54,6 @@ void Object::Update(float time) {
 	x += v_x*time;
 	y += v_y*time;
 
-	// 오브젝트 충돌체크 되면 색상변경
-	if (is_collide) {
-		R = 1.0f;
-		G = 0.0f;
-		B = 0.0f;
-		A = 0.0f;
-		is_collide = false;
-	}
-	else {	// 충돌이 아니면
-		if (type == OBJECT_BUILDING) {
-			R = 1.0f;
-			G = 1.0f;
-			B = 0.0f;
-			A = 1.0f;
-		}
-		else if (type == OBJECT_CHARACTER) {
-			R = 1.0f;
-			G = 1.0f;
-			B = 1.0f;
-			A = 1.0f;
-		}
-	}
-
 	// 빌딩오브젝트는 0.5초마다 총알을 발사해야한다.
 }
 

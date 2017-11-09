@@ -24,6 +24,9 @@
     <Filter Include="SceneMgr">
       <UniqueIdentifier>{233d3914-5244-4fc3-8544-c32284dc02a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LoadPng">
+      <UniqueIdentifier>{b9749b7f-6f8f-4344-837d-51181594874d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -44,6 +47,9 @@
     <ClInclude Include="SceneMgr.h">
       <Filter>SceneMgr</Filter>
     </ClInclude>
+    <ClInclude Include="LoadPng.h">
+      <Filter>LoadPng</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SimpleGame.cpp">
@@ -61,12 +67,27 @@
     <ClCompile Include="SceneMgr.cpp">
       <Filter>SceneMgr</Filter>
     </ClCompile>
+    <ClCompile Include="LoadPng.cpp">
+      <Filter>LoadPng</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\SolidRect.fs">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\SolidRect.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SolidRectWithTexture.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SolidRectWithTexture.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SolidRectWithTextureSeq.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SolidRectWithTextureSeq.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
