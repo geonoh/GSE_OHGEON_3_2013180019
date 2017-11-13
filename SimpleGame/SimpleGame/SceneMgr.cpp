@@ -5,11 +5,11 @@ int number = 0;
 float start_time = 0.0f;
 GLuint texture_id = 0;
 
-SceneMgr::SceneMgr(float x, float y )
-{	
+SceneMgr::SceneMgr(float x, float y)
+{
 	// Initialize Renderer
 	srand((unsigned)time(NULL));
-	renderer = new Renderer(x, y);
+	renderer = new Renderer((int)x, (int)y);
 	if (!renderer->IsInitialized())
 	{
 		std::cout << "Renderer could not be initialized.. \n";
@@ -66,8 +66,13 @@ void SceneMgr::Update(float elapsed_time) {
 				m_objects.push_back(Object(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
 					2.f, 0.f, 1.f, 0.f, 1.f,
 					SPEED_ARROW * ((float)std::rand() / (float)RAND_MAX) - 0.5f, SPEED_ARROW * ((float)std::rand() / (float)RAND_MAX) - 0.5f, 0.0f,
-					0.01f, OBJECT_ARROW, 10,LIFETIME_ARROW
+					0.01f, OBJECT_ARROW, 10, LIFETIME_ARROW
 				));
+				// 캐릭터에서 발사한 Arrow는 각 캐릭터의 고유 Arrow_num이 있어야한다.
+				// Arrow가 push_back 되었으므로 새로 추가된 object는 마지막번째 있다.
+
+				m_objects[m_objects.size() - 1].SetArrowNumber(i);
+				//std::cout << m_objects.size() - 1 << "번째 Arrow이고 이 Arrow는 " << i << "번의 Character" << std::endl;
 			}
 		}
 
@@ -128,7 +133,7 @@ void SceneMgr::CollideCheck() {
 	float bottom_b = 0;
 
 	// vector에 object가 있을때만 충돌체크가 가능하게 프로그램함.
-	if (m_objects.size() > 0) {			
+	if (m_objects.size() > 0) {
 		for (int i = 0; i < m_objects.size() - 1; ++i) {
 			for (int j = i + 1; j < m_objects.size(); ++j) {
 				if ((m_objects[i].GetLife() > 0) && (m_objects[j].GetLife() > 0)) {
@@ -150,6 +155,7 @@ void SceneMgr::CollideCheck() {
 					if (m_objects[i].type == OBJECT_CHARACTER && m_objects[j].type == OBJECT_CHARACTER) {
 						// 캐릭터와 캐릭터일 경우
 						// 충돌해도 데미지 없음.
+						continue;
 					}
 					else if (m_objects[i].type == OBJECT_CHARACTER && m_objects[j].type == OBJECT_BUILDING) {
 						// 캐릭터와 빌딩 충돌하게되면
@@ -166,7 +172,7 @@ void SceneMgr::CollideCheck() {
 					}
 					else if (m_objects[i].type == OBJECT_BUILDING && m_objects[j].type == OBJECT_CHARACTER) {
 						// 빌딩, 캐릭터 충돌하게되면
-						
+
 						// 빌딩의 라이프 - 캐릭터 라이프
 						m_objects[i].is_collide = true;
 						m_objects[i].LostLife(m_objects[j].GetLife());
@@ -179,7 +185,7 @@ void SceneMgr::CollideCheck() {
 						m_objects.erase(m_objects.begin() + j);
 						// 오 된다!!!!!!!!!!!!!!!!!!!
 					}
-					
+
 					// 총알의 충돌체크 해줘야함.
 					else if (m_objects[i].type == OBJECT_CHARACTER && m_objects[j].type == OBJECT_BULLET) {
 						// 캐릭터 충돌함.
@@ -201,13 +207,42 @@ void SceneMgr::CollideCheck() {
 						m_objects.erase(m_objects.begin() + i);
 					}
 
-					// 캐릭터와 Arrow가 충돌할때는 아무고통 못하게 해야한당 ㅎ
+
+					// 여기 좀 이상한데 다시 확인 해보기.
+					// --------------------------------------------------------------------------------------------------
+					// 캐릭터와 Arrow가 충돌할때는 일단 Arrow_number 비교하고 충돌
 					else if (m_objects[i].type == OBJECT_CHARACTER && m_objects[j].type == OBJECT_ARROW) {
-						continue;
+						// Arrow_num이랑 오브젝트 번호가 같으면 충돌하면 ㄴㄴ
+						if (i == m_objects[j].GetArrowNumber())
+							continue;
+						else if (i != m_objects[j].GetArrowNumber()) {
+							// Arrow랑 다른 Character충돌 .
+							m_objects[i].is_collide = true;
+							m_objects[i].SetLife(m_objects[i].GetLife() - m_objects[j].GetLife());
+
+							// 총알은 닿으면 그냥 erase
+							m_objects[j].is_collide = true;
+							m_objects.erase(m_objects.begin() + j);
+						}
 					}
 					else if (m_objects[i].type == OBJECT_ARROW && m_objects[j].type == OBJECT_CHARACTER) {
-						continue;
+						// Arrow_num이랑 오브젝트 번호가 같으면 충돌하면 ㄴㄴ
+						if (j == m_objects[i].GetArrowNumber())
+							continue;
+						else if (m_objects[i].GetArrowNumber() != j) {
+							// Arrow랑 다른 Character충돌 .
+							m_objects[j].is_collide = true;
+							m_objects[j].SetLife(m_objects[j].GetLife() - m_objects[i].GetLife());
+
+							// 총알은 닿으면 그냥 erase
+							m_objects[i].is_collide = true;
+							m_objects.erase(m_objects.begin() + i);
+						}
 					}
+					// --------------------------------------------------------------------------------------------------
+
+
+
 
 					// Arrow와 빌딩
 					else if (m_objects[i].type == OBJECT_BUILDING && m_objects[j].type == OBJECT_ARROW) {
@@ -218,6 +253,8 @@ void SceneMgr::CollideCheck() {
 						// Arrow는 닿으면 그냥 erase
 						m_objects[j].is_collide = true;
 						m_objects.erase(m_objects.begin() + j);
+						std::cout << " : 보스체력 ::" << m_objects[i].GetLife() << std::endl;
+
 					}
 					else if (m_objects[i].type == OBJECT_ARROW && m_objects[j].type == OBJECT_BUILDING) {
 						// 캐릭터 충돌함.
@@ -227,6 +264,8 @@ void SceneMgr::CollideCheck() {
 						// Arrow은 닿으면 그냥 erase
 						m_objects[i].is_collide = true;
 						m_objects.erase(m_objects.begin() + i);
+						std::cout << " : 보스체력 ::" << m_objects[j].GetLife() << std::endl;
+
 					}
 				}
 			}
@@ -273,12 +312,10 @@ void SceneMgr::MouseInput(int x, int y, int object_type) {
 	}
 	// 클릭했을 때 소환되는 오브젝트는 나중에 따로 입력받을 수 있게 한다. 
 	else {
-		if (object_type == OBJECT_CHARACTER) {
-			m_objects.push_back(Object(x - 250.f, 250.f - y,
-				0.0f, 10.0f, 1.f, 1.f, 1.f, 1.0f,
-				// 교수님 랜덤방식 참조
-				SPEED_CHARACTER*((float)std::rand() / (float)RAND_MAX) - 0.5f, SPEED_CHARACTER*((float)std::rand() / (float)RAND_MAX) - 0.5f, 0.0f,
-				MOVE_SPEED, OBJECT_CHARACTER, 10, LIFETIME_CHARACTER));
-		}
+		m_objects.push_back(Object(x - 250.f, 250.f - y,
+			0.0f, 10.0f, 1.f, 1.f, 1.f, 1.0f,
+			// 교수님 랜덤방식 참조
+			SPEED_CHARACTER*((float)std::rand() / (float)RAND_MAX) - 0.5f, SPEED_CHARACTER*((float)std::rand() / (float)RAND_MAX) - 0.5f, 0.0f,
+			MOVE_SPEED, OBJECT_CHARACTER, 10, LIFETIME_CHARACTER));
 	}
 }

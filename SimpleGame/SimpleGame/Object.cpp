@@ -18,6 +18,11 @@ Object::Object(float x, float y, float z, float size, float R, float G, float B,
 {
 }
 
+Object::Object(float x, float y, float z, float size, float R, float G, float B, float A, float v_x, float v_y, float v_z, float i_speed, int type, int life, float life_time, int arrow_num)
+	: x(x), y(y), z(z), size(size), R(R), G(G), B(B), A(A), v_x(v_x), v_y(v_y), v_z(v_z), speed(i_speed), type(type), life(life), life_time(life_time), arrow_number(arrow_num)
+{
+}
+
 float Object::Get_x() {
 	return x;
 }
@@ -64,7 +69,7 @@ void Object::LostLife(int num) {
 	life -= num;
 }
 
-float Object::GetLife() {
+int Object::GetLife() {
 	return life;
 }
 
@@ -73,4 +78,13 @@ float Object::GetLifeTime() {
 }
 void Object::SetLifeTime(float input_life_time) {
 	life_time = input_life_time;
+}
+
+
+void Object::SetArrowNumber(int set_arrow_number) {
+	arrow_number = set_arrow_number;
+}
+
+int Object::GetArrowNumber() {
+	return arrow_number;
 }
