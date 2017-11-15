@@ -24,7 +24,7 @@ SceneMgr::SceneMgr(float x, float y)
 	srand((unsigned)time(NULL));
 
 	// Image ID 만들어주기
-	char file_path[] = "./Resource/agumon.png";
+	char file_path[] = "./Resource/coc.png";
 	texture_id = renderer->CreatePngTexture(file_path);
 }
 
@@ -49,15 +49,20 @@ void SceneMgr::Update(float elapsed_time) {
 	}
 
 
-	if (is_clocking == false) {
+	// 이렇게 해줘야 다 없어져도 프로그램이 터지지 않는단다.
+	if (is_clocking == false && m_objects.size() > 0) {
 		is_shooting = true;
 		// 총알을 여기서 push_back 해준다.
-		m_objects.push_back(Object(m_objects[0].Get_x(), m_objects[0].Get_y(), m_objects[0].Get_z(),
-			2.f, 1.f, 0.f, 0.f, 1.f,
-			// 교수님 랜덤방식 참조
-			SPEED_BULLET * ((float)std::rand() / (float)RAND_MAX) - 0.5f, SPEED_BULLET * ((float)std::rand() / (float)RAND_MAX) - 0.5f, 0.0f,
-			0.01f, OBJECT_BULLET, 20, LIFETIME_BULLET
-		));
+
+		// 중립 빌딩이 생명이 있을때만!
+		if (m_objects[0].GetLife() > 0 && m_objects[0].type == OBJECT_BUILDING) {
+			m_objects.push_back(Object(m_objects[0].Get_x(), m_objects[0].Get_y(), m_objects[0].Get_z(),
+				2.f, 1.f, 0.f, 0.f, 1.f,
+				// 교수님 랜덤방식 참조
+				SPEED_BULLET * ((float)std::rand() / (float)RAND_MAX) - 0.5f, SPEED_BULLET * ((float)std::rand() / (float)RAND_MAX) - 0.5f, 0.0f,
+				0.01f, OBJECT_BULLET, 20, LIFETIME_BULLET
+			));
+		}
 
 		// 캐릭터의 Arrow 발사
 		for (int i = 0; i < m_objects.size(); ++i) {
