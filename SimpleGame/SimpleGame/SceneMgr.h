@@ -13,13 +13,21 @@ class SceneMgr
 	Renderer* renderer;
 	vector<Object> m_objects;
 public:
-	bool is_shooting = false;
+	bool is_clock_building = false;
 	bool is_clocking = false;
+
+	bool team_1_clocking = false;
+	bool team_2_character_clocking = false;
+
+	float team_2_timer = 0.f;
+
+
+
 	SceneMgr(float x,float y);
 	~SceneMgr();
 	void Update(float elapsed_time);
 	void CollideCheck();
-	void MouseInput(int x, int y, int object_type);
+	void MouseInput(int x, int y);
 	void SceneRender();
 };
 

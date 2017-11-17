@@ -17,12 +17,16 @@ but WITHOUT ANY WARRANTY.
 #include "Object.h"
 #include "SceneMgr.h"
 
+
+
 SceneMgr* p_Scene = nullptr;
 int click_count = 0;
 
 bool left_button_down = false;
 
 DWORD previous_time = 0;
+
+float cool_time_elapsed = 0;
 
 void RenderScene(void)
 {
@@ -60,7 +64,9 @@ void MouseInput(int button, int state, int x, int y)
 
 		// 좌 클릭 후 떼면 캐릭터 오브젝트 소환
 		if (left_button_down) {		// 클릭됨.
-			p_Scene->MouseInput(x, y, OBJECT_CHARACTER);
+			std::cout << "x, y : " << x << ", " << y << " 시간 : " << cool_time_elapsed << std::endl;
+
+			p_Scene->MouseInput(x, y);
 		}
 		left_button_down = false;
 	}
@@ -92,7 +98,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutCreateWindow("Game Software Engineering KPU");
 
 	glewInit();
@@ -105,7 +111,7 @@ int main(int argc, char **argv)
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
 
-	p_Scene = new SceneMgr(500, 500);
+	p_Scene = new SceneMgr(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);

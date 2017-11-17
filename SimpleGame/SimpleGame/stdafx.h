@@ -22,3 +22,16 @@
 #define LIFETIME_CHARACTER	20
 #define LIFETIME_ARROW		3
 #define LIFETIME_ULTIMATE	-1
+
+#define WINDOW_WIDTH	500
+#define WINDOW_HEIGHT	800
+
+#define TEAM_1			0
+#define TEAM_2			1
+
+#define NOT_ARROW		-1
+
+#define ENEMY_GENTIME		5
+#define PLAYER_COOLTIME		7
+#define ARROW_GENTIME		3
+#define BULLET_GENTIME		10

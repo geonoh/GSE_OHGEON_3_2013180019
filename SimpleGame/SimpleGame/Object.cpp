@@ -6,20 +6,14 @@ using namespace std;
 
 Object::Object()
 {
-	//life = 10;
 }
 
 Object::~Object()
 {
 }
 
-Object::Object(float x, float y, float z, float size, float R, float G, float B, float A, float v_x, float v_y, float v_z, float i_speed, int type,int life,float life_time)
-	: x(x), y(y), z(z), size(size), R(R), G(G), B(B), A(A), v_x(v_x), v_y(v_y), v_z(v_z), speed(i_speed), type(type), life(life), life_time(life_time)
-{
-}
-
-Object::Object(float x, float y, float z, float size, float R, float G, float B, float A, float v_x, float v_y, float v_z, float i_speed, int type, int life, float life_time, int arrow_num)
-	: x(x), y(y), z(z), size(size), R(R), G(G), B(B), A(A), v_x(v_x), v_y(v_y), v_z(v_z), speed(i_speed), type(type), life(life), life_time(life_time), arrow_number(arrow_num)
+Object::Object(float x, float y, float z, float size, float R, float G, float B, float A, float v_x, float v_y, float v_z, float i_speed, int type,int life,float life_time,int team)
+	: x(x), y(y), z(z), size(size), R(R), G(G), B(B), A(A), v_x(v_x), v_y(v_y), v_z(v_z), speed(i_speed), type(type), life(life), life_time(life_time), team(team)
 {
 }
 
@@ -50,16 +44,15 @@ float Object::Get_A() {
 
 void Object::Update(float time) {
 	// 벽에 충돌되면 해당 좌표축 방향벡터 *(-1)
-	if (x > 250 || x < -250)
+	if (x >= (WINDOW_WIDTH / 2) || x <= -(WINDOW_WIDTH / 2))
 		v_x = v_x*(-1);
-	if (y > 250 || y < -250)
+	if (y >= (WINDOW_HEIGHT / 2) || y <= -(WINDOW_HEIGHT / 2))
 		v_y = v_y*(-1);
 
 	// Updated_Position = Prev + 속도 벡터 * 시간
-	x += v_x*time;
-	y += v_y*time;
+	x += v_x * time * speed;
+	y += v_y * time * speed;
 
-	// 빌딩오브젝트는 0.5초마다 총알을 발사해야한다.
 }
 
 void Object::SetLife(int num) {
@@ -87,4 +80,9 @@ void Object::SetArrowNumber(int set_arrow_number) {
 
 int Object::GetArrowNumber() {
 	return arrow_number;
+}
+
+
+int Object::GetTeam() {
+	return team;
 }

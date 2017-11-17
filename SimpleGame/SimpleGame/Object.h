@@ -18,6 +18,10 @@ private:
 	float life_time;
 
 	int arrow_number = 0;
+
+
+	int team;
+
 public:
 
 	// 충돌관련 함수
@@ -28,10 +32,10 @@ public:
 
 	Object();
 	Object(float x, float y, float z, float size, float R, float G, float B, float A, 
-		float v_x, float v_y, float v_z, float i_speed, int type, int life,float life_time);
-	// 에로우 전용
-	Object(float x, float y, float z, float size, float R, float G, float B, float A,
-		float v_x, float v_y, float v_z, float i_speed, int type, int life, float life_time, int arrow_num);
+		float v_x, float v_y, float v_z, float i_speed, int type, int life,float life_time,int team);
+	//// 에로우 전용
+	//Object(float x, float y, float z, float size, float R, float G, float B, float A,
+	//	float v_x, float v_y, float v_z, float i_speed, int type, int life, float life_time, int arrow_num,int team);
 
 	float Get_x();
 	float Get_y();
@@ -55,6 +59,9 @@ public:
 	// type이 Arrow인 경우에는 Arrow의 number을 set해줘야함
 	void SetArrowNumber(int set_arrow_number);
 	int GetArrowNumber();
+
+
+	int GetTeam();
 
 	~Object();
 
