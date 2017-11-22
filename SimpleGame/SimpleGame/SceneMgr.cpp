@@ -5,7 +5,8 @@ float start_time = 0.0f;
 float start_time_building = 0.0f;
 float start_time_team1 = 0.f;
 float start_time_character_spawn = 0.f;
-GLuint texture_id = 0;
+GLuint texture_id_1 = 0;
+GLuint texture_id_2 = 1;
 
 SceneMgr::SceneMgr(float x, float y)
 {
@@ -59,8 +60,10 @@ SceneMgr::SceneMgr(float x, float y)
 
 
 	// Image ID 만들어주기
-	char file_path[] = "./Resource/coc.png";
-	texture_id = renderer->CreatePngTexture(file_path);
+	char team_1_path[] = "./Resource/emote_laugh.png";
+	char team_2_path[] = "./Resource/emote_cry.png";
+	texture_id_1 = renderer->CreatePngTexture(team_1_path);
+	texture_id_2 = renderer->CreatePngTexture(team_2_path);
 }
 
 
@@ -405,10 +408,15 @@ void SceneMgr::SceneRender() {
 		// 생명이 있을경우에만 그린다. 
 		if (m_objects[i].GetLife() > 0) {
 			// 빌딩에만 이미지 넣쟈
-			if (m_objects[i].type == OBJECT_BUILDING) {
+			if (m_objects[i].type == OBJECT_BUILDING && m_objects[i].GetTeam() == TEAM_1) {
 				renderer->DrawTexturedRect(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
-					m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(), texture_id);
+					m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(), texture_id_1);
 			}
+			else if (m_objects[i].type == OBJECT_BUILDING && m_objects[i].GetTeam() == TEAM_2) {
+				renderer->DrawTexturedRect(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
+					m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(), texture_id_2);
+			}
+
 			else {
 				renderer->DrawSolidRect(m_objects[i].Get_x(),
 					m_objects[i].Get_y(), m_objects[i].Get_z(),
