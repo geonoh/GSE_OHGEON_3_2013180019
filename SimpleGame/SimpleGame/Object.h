@@ -21,8 +21,10 @@ private:
 
 
 	int team;
-
+	
 public:
+	// 그림그리는 우선순위
+	float draw_rank;
 
 	// 충돌관련 함수
 	bool is_collide;

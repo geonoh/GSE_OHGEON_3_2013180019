@@ -17,6 +17,18 @@
 #define SPEED_CHARACTER		300
 #define SPEED_ARROW			100
 
+// life
+#define LIFE_BUILDING		500
+#define LIFE_CHARACTER		100
+#define LIFE_BULLET			15
+#define LIFE_ARROW			10
+
+// Size
+#define SIZE_BUILDING		100.f
+#define SIZE_CHARACTER		30.f
+#define SIZE_BULLET			4.f
+#define SIZE_ARROW			4.f
+
 
 #define LIFETIME_BULLET		8
 #define LIFETIME_CHARACTER	20
@@ -31,7 +43,15 @@
 
 #define NOT_ARROW		-1
 
+// time°ü·Ã
 #define ENEMY_GENTIME		5
-#define PLAYER_COOLTIME		7
+#define PLAYER_COOLTIME		1
 #define ARROW_GENTIME		3
 #define BULLET_GENTIME		10
+
+
+// depth test
+#define DRAWRANK_BUILDING	0.1
+#define DRAWRANK_CHARACTER	0.2
+#define DRAWRANK_BULLET		0.3
+#define DRAWRANK_ARROW		0.3

@@ -6,7 +6,9 @@ float start_time_building = 0.0f;
 float start_time_team1 = 0.f;
 float start_time_character_spawn = 0.f;
 GLuint texture_id_1 = 0;
-GLuint texture_id_2 = 1;
+GLuint texture_id_2 = 0;
+GLuint texture_id_3 = 0;
+GLuint texture_id_4 = 0;
 
 SceneMgr::SceneMgr(float x, float y)
 {
@@ -21,40 +23,40 @@ SceneMgr::SceneMgr(float x, float y)
 
 	// TEAM_1 빌딩 생성해주기.
 	m_objects.push_back(Object(-200.f, 300.f, 0.f,
-		100.0f, 1.f, 1.f, 0.f, 1.f,
+		SIZE_BUILDING, 1.f, 1.f, 1.f, 1.f,
 		0.f, 0.f, 0.f, 0.f,
-		OBJECT_BUILDING, 500, LIFETIME_ULTIMATE, TEAM_1));
+		OBJECT_BUILDING, LIFE_BUILDING, LIFETIME_ULTIMATE, TEAM_1));
 
 	// TEAM_1 빌딩 생성해주기.
 	m_objects.push_back(Object(0.f, 300.f, 0.f,
-		100.0f, 1.f, 1.f, 0.f, 1.f,
+		SIZE_BUILDING, 1.f, 1.f, 1.f, 1.f,
 		0.f, 0.f, 0.f, 0.f,
-		OBJECT_BUILDING, 500, LIFETIME_ULTIMATE, TEAM_1));
+		OBJECT_BUILDING, LIFE_BUILDING, LIFETIME_ULTIMATE, TEAM_1));
 
 	// TEAM_1 빌딩 생성해주기.
 	m_objects.push_back(Object(200.f, 300.f, 0.f,
-		100.0f, 1.f, 1.f, 0.f, 1.f,
+		SIZE_BUILDING, 1.f, 1.f, 1.f, 1.f,
 		0.f, 0.f, 0.f, 0.f,
-		OBJECT_BUILDING, 500, LIFETIME_ULTIMATE, TEAM_1));
+		OBJECT_BUILDING, LIFE_BUILDING, LIFETIME_ULTIMATE, TEAM_1));
 
 
 	// TEAM_2 빌딩 생성해주기.
 	m_objects.push_back(Object(-200.f, -300.f, 0.f,
-		100.0f, 1.f, 1.f, 0.f, 1.f,
+		SIZE_BUILDING, 1.f, 1.f, 1.f, 1.f,
 		0.f, 0.f, 0.f, 0.f,
-		OBJECT_BUILDING, 500, LIFETIME_ULTIMATE, TEAM_2));
+		OBJECT_BUILDING, LIFE_BUILDING, LIFETIME_ULTIMATE, TEAM_2));
 
 	// TEAM_2 빌딩 생성해주기.
 	m_objects.push_back(Object(0.f, -300.f, 0.f,
-		100.0f, 1.f, 1.f, 0.f, 1.f,
+		SIZE_BUILDING, 1.f, 1.f, 1.f, 1.f,
 		0.f, 0.f, 0.f, 0.f,
-		OBJECT_BUILDING, 500, LIFETIME_ULTIMATE, TEAM_2));
+		OBJECT_BUILDING, LIFE_BUILDING, LIFETIME_ULTIMATE, TEAM_2));
 
 	// TEAM_2 빌딩 생성해주기.
 	m_objects.push_back(Object(200.f, -300.f, 0.f,
-		100.0f, 1.f, 1.f, 0.f, 1.f,
+		SIZE_BUILDING, 1.f, 1.f, 1.f, 1.f,
 		0.f, 0.f, 0.f, 0.f,
-		OBJECT_BUILDING, 500, LIFETIME_ULTIMATE, TEAM_2));
+		OBJECT_BUILDING, LIFE_BUILDING, LIFETIME_ULTIMATE, TEAM_2));
 
 
 
@@ -62,8 +64,13 @@ SceneMgr::SceneMgr(float x, float y)
 	// Image ID 만들어주기
 	char team_1_path[] = "./Resource/emote_laugh.png";
 	char team_2_path[] = "./Resource/emote_cry.png";
+	char team_3_path[] = "./Resource/Blue_King_Laughing.png";
+	char team_4_path[] = "./Resource/Red_King_Angry.png";
 	texture_id_1 = renderer->CreatePngTexture(team_1_path);
 	texture_id_2 = renderer->CreatePngTexture(team_2_path);
+	texture_id_3 = renderer->CreatePngTexture(team_3_path);
+	texture_id_4 = renderer->CreatePngTexture(team_4_path);
+
 }
 
 
@@ -116,10 +123,10 @@ void SceneMgr::Update(float elapsed_time) {
 		for (int i = 0; i < 3; ++i) {
 			if (m_objects[i].GetLife() > 0 && m_objects[i].type == OBJECT_BUILDING) {
 				m_objects.push_back(Object(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
-					2.f, 1.f, 0.f, 0.f, 1.f,
+					SIZE_BULLET, 1.f, 0.f, 0.f, 1.f,
 					// 교수님 랜덤방식 참조
 					(float)(rand() % 250 - rand() % 250) / 250, (float)(rand() % 250 - rand() % 250) / 250, 0.0f,
-					SPEED_BULLET, OBJECT_BULLET, 20, LIFETIME_BULLET, TEAM_1
+					SPEED_BULLET, OBJECT_BULLET, LIFE_BULLET, LIFETIME_BULLET, TEAM_1
 				));
 			}
 		}
@@ -128,10 +135,10 @@ void SceneMgr::Update(float elapsed_time) {
 		for (int i = 3; i < 6; ++i) {
 			if (m_objects[i].GetLife() > 0 && m_objects[i].type == OBJECT_BUILDING) {
 				m_objects.push_back(Object(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
-					2.f, 0.f, 0.f, 1.f, 1.f,
+					SIZE_BULLET, 0.f, 0.f, 1.f, 1.f,
 					// 교수님 랜덤방식 참조
 					(float)(rand() % 250 - rand() % 250) / 250, (float)(rand() % 250 - rand() % 250) / 250, 0.0f,
-					SPEED_BULLET, OBJECT_BULLET, 20, LIFETIME_BULLET, TEAM_2
+					SPEED_BULLET, OBJECT_BULLET, LIFE_BULLET, LIFETIME_BULLET, TEAM_2
 				));
 			}
 		}
@@ -146,9 +153,9 @@ void SceneMgr::Update(float elapsed_time) {
 			// 캐릭터 오브젝터이면.
 			if (m_objects[i].type == OBJECT_CHARACTER && m_objects[i].GetTeam() == TEAM_1) {
 				m_objects.push_back(Object(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
-					2.f, 0.5f, 0.2f, 0.7f, 1.f,
+					SIZE_ARROW, 0.5f, 0.2f, 0.7f, 1.f,
 					 (float)(rand() % 250 - rand() % 250) / 250, (float)(rand() % 250 - rand() % 250) / 250, 0.0f,
-					SPEED_ARROW, OBJECT_ARROW, 10, LIFETIME_ARROW, TEAM_1
+					SPEED_ARROW, OBJECT_ARROW, LIFE_ARROW, LIFETIME_ARROW, TEAM_1
 				));
 				// 캐릭터에서 발사한 Arrow는 각 캐릭터의 고유 Arrow_num이 있어야한다.
 				// Arrow가 push_back 되었으므로 새로 추가된 object는 마지막번째 있다.
@@ -160,9 +167,9 @@ void SceneMgr::Update(float elapsed_time) {
 			// 팀2의 캐릭터 Arrow. 
 			if (m_objects[i].type == OBJECT_CHARACTER && m_objects[i].GetTeam() == TEAM_2) {
 				m_objects.push_back(Object(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
-					2.f, 1.f, 1.f, 0.f, 1.f,
+					SIZE_ARROW, 1.f, 1.f, 0.f, 1.f,
 					(float)(rand() % 250 - rand() % 250) / 250, (float)(rand() % 250 - rand() % 250) / 250, 0.0f,
-					SPEED_ARROW, OBJECT_ARROW, 10, LIFETIME_ARROW, TEAM_2
+					SPEED_ARROW, OBJECT_ARROW, LIFE_ARROW, LIFETIME_ARROW, TEAM_2
 				));
 				// 캐릭터에서 발사한 Arrow는 각 캐릭터의 고유 Arrow_num이 있어야한다.
 				// Arrow가 push_back 되었으므로 새로 추가된 object는 마지막번째 있다.
@@ -192,10 +199,10 @@ void SceneMgr::Update(float elapsed_time) {
 		if (is_team1_alive > 0) {
 			std::cout << "캐릭터생성" << std::endl;
 			m_objects.push_back(Object(-250 + rand() % 500, rand() % 400, 0.f,
-				10.f, 1.f, 0.f, 0.f, 1.f,
+				SIZE_CHARACTER, 1.f, 1.f, 1.f, 1.f,
 				// 교수님 랜덤방식 참조
 				(float)(rand() % 250 - rand() % 250) / 250, (float)(rand() % 250 - rand() % 250) / 250, 0.0f,
-				SPEED_CHARACTER, OBJECT_CHARACTER, 10, LIFETIME_CHARACTER, TEAM_1
+				SPEED_CHARACTER, OBJECT_CHARACTER, LIFE_CHARACTER, LIFETIME_CHARACTER, TEAM_1
 			));
 			is_team1_alive = 0;
 		}
@@ -432,11 +439,46 @@ void SceneMgr::SceneRender() {
 			// 빌딩에만 이미지 넣쟈
 			if (m_objects[i].type == OBJECT_BUILDING && m_objects[i].GetTeam() == TEAM_1) {
 				renderer->DrawTexturedRect(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
-					m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(), texture_id_1);
+					m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(),
+					texture_id_1, m_objects[i].draw_rank);
+
+				// 빌딩 게이지 넣어주기
+				renderer->DrawSolidRectGauge(m_objects[i].Get_x(), m_objects[i].Get_y() - m_objects[i].Get_size() / 1.5, m_objects[i].Get_z(),
+					m_objects[i].Get_size(), 5.f, 1.f, 0.f, 0.f,
+					1.f, (float)m_objects[i].GetLife() / LIFE_BUILDING, m_objects[i].draw_rank);
 			}
 			else if (m_objects[i].type == OBJECT_BUILDING && m_objects[i].GetTeam() == TEAM_2) {
 				renderer->DrawTexturedRect(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
-					m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(), texture_id_2);
+					m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(),
+					texture_id_2, m_objects[i].draw_rank);
+
+				// 빌딩 게이지 넣어주기
+				renderer->DrawSolidRectGauge(m_objects[i].Get_x(), m_objects[i].Get_y() + m_objects[i].Get_size() / 1.5, m_objects[i].Get_z(),
+					m_objects[i].Get_size(), 5.f, 0.f, 0.f, 1.f,
+					1.f, (float)m_objects[i].GetLife() / LIFE_BUILDING, m_objects[i].draw_rank);
+
+			}
+
+			else if (m_objects[i].type == OBJECT_CHARACTER && m_objects[i].GetTeam() == TEAM_1) {
+				renderer->DrawTexturedRect(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
+					m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(),
+					texture_id_4, m_objects[i].draw_rank);
+
+				// 빌딩 게이지 넣어주기
+				renderer->DrawSolidRectGauge(m_objects[i].Get_x(), m_objects[i].Get_y() + m_objects[i].Get_size(), m_objects[i].Get_z(),
+					m_objects[i].Get_size(), 5.f, 1.f, 0.f, 0.f,
+					1.f, (float)m_objects[i].GetLife() / LIFE_CHARACTER, m_objects[i].draw_rank);
+			}
+			else if (m_objects[i].type == OBJECT_CHARACTER && m_objects[i].GetTeam() == TEAM_2) {
+				renderer->DrawTexturedRect(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
+					m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(),
+					texture_id_3, m_objects[i].draw_rank);
+
+				// 빌딩 게이지 넣어주기
+				renderer->DrawSolidRectGauge(m_objects[i].Get_x(), m_objects[i].Get_y() + m_objects[i].Get_size(), m_objects[i].Get_z(),
+					m_objects[i].Get_size(), 5.f, 0.f, 0.f, 1.f,
+					1.f, (float)m_objects[i].GetLife() / LIFE_CHARACTER, m_objects[i].draw_rank);
+
 			}
 
 			else {
@@ -444,7 +486,7 @@ void SceneMgr::SceneRender() {
 					m_objects[i].Get_y(), m_objects[i].Get_z(),
 					m_objects[i].Get_size(), m_objects[i].Get_R(),
 					m_objects[i].Get_G(), m_objects[i].Get_B(),
-					m_objects[i].Get_A());
+					m_objects[i].Get_A(), m_objects[i].draw_rank);
 			}
 		}
 	}
@@ -474,10 +516,10 @@ void SceneMgr::MouseInput(int x, int y) {
 		if (y > WINDOW_HEIGHT / 2) {
 			if (team_2_character_clocking == false) {
 				m_objects.push_back(Object(x - (WINDOW_WIDTH / 2), (WINDOW_HEIGHT / 2) - y,
-					0.0f, 10.0f, 0.f, 0.f, 1.f, 1.0f,
+					0.0f, SIZE_CHARACTER, 1.f, 1.f, 1.f, 1.f,
 					// 교수님 랜덤방식 참조
 					(float)(rand() % 250 - rand() % 250) / 250, (float)(rand() % 250 - rand() % 250) / 250, 0.0f,
-					SPEED_CHARACTER, OBJECT_CHARACTER, 10, LIFETIME_CHARACTER, TEAM_2));
+					SPEED_CHARACTER, OBJECT_CHARACTER, LIFE_CHARACTER, LIFETIME_CHARACTER, TEAM_2));
 				team_2_character_clocking = true;
 			}
 			else {
