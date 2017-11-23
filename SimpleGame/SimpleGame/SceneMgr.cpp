@@ -335,6 +335,28 @@ void SceneMgr::CollideCheck() {
 						}
 
 
+						// 총알의 충돌체크 해줘야함.
+						else if (m_objects[i].type == OBJECT_BUILDING && m_objects[j].type == OBJECT_BULLET) {
+							// 캐릭터 충돌함.
+							m_objects[i].is_collide = true;
+							m_objects[i].SetLife(m_objects[i].GetLife() - m_objects[j].GetLife());
+
+							// 총알은 닿으면 그냥 erase
+							m_objects[j].is_collide = true;
+							m_objects.erase(m_objects.begin() + j);
+						}
+
+						else if (m_objects[i].type == OBJECT_BULLET && m_objects[j].type == OBJECT_BUILDING) {
+							// 캐릭터 충돌함.
+							m_objects[j].is_collide = true;
+							m_objects[j].SetLife(m_objects[j].GetLife() - m_objects[i].GetLife());
+
+							// 총알은 닿으면 그냥 erase
+							m_objects[i].is_collide = true;
+							m_objects.erase(m_objects.begin() + i);
+						}
+
+
 						// 여기 좀 이상한데 다시 확인 해보기.
 						// --------------------------------------------------------------------------------------------------
 						// 캐릭터와 Arrow가 충돌할때는 일단 Arrow_number 비교하고 충돌
