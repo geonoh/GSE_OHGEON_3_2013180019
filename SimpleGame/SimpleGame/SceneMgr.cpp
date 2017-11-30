@@ -10,6 +10,18 @@ GLuint texture_id_2 = 0;
 GLuint texture_id_3 = 0;
 GLuint texture_id_4 = 0;
 
+GLuint texture_id_background = 0;
+GLuint texture_id_sprite = 0;
+GLuint texture_id_particle = 0;
+
+
+int sprite_x = 0;
+int sprite1_x = 0;
+float particle_time = 0.f;
+DWORD previous_time_particle = 0;
+float elapsed_time_in_sec_particle = 0;
+
+
 SceneMgr::SceneMgr(float x, float y)
 {
 	// Initialize Renderer
@@ -66,11 +78,18 @@ SceneMgr::SceneMgr(float x, float y)
 	char team_2_path[] = "./Resource/emote_cry.png";
 	char team_3_path[] = "./Resource/Blue_King_Laughing.png";
 	char team_4_path[] = "./Resource/Red_King_Angry.png";
+	char back_path[] = "./Resource/background.png";
+	char sprite_path[] = "./Resource/sprite2.png";
+	char particle_path[] = "./Resource/particle.png";
+
 	texture_id_1 = renderer->CreatePngTexture(team_1_path);
 	texture_id_2 = renderer->CreatePngTexture(team_2_path);
 	texture_id_3 = renderer->CreatePngTexture(team_3_path);
 	texture_id_4 = renderer->CreatePngTexture(team_4_path);
-
+	texture_id_background = renderer->CreatePngTexture(back_path);
+	texture_id_sprite = renderer->CreatePngTexture(sprite_path);
+	texture_id_particle = renderer->CreatePngTexture(particle_path);
+	
 }
 
 
@@ -433,6 +452,32 @@ void SceneMgr::CollideCheck() {
 
 
 void SceneMgr::SceneRender() {
+	// 배경그려주기
+	
+	renderer->DrawTexturedRect(0.f, 0.f, 0.f,
+		1000.f, 1.f, 1.f, 1.f, 1.f,
+		texture_id_background, DRAWRANK_BACKGROUND);
+
+	DWORD current_time = timeGetTime();
+	DWORD elapsed_time = current_time - previous_time_particle;
+	previous_time_particle = current_time;
+
+	elapsed_time_in_sec_particle = elapsed_time / 1000.f;
+
+	if (sprite_x > 3)
+		sprite_x = 0;
+
+	if (sprite1_x > 3)
+		sprite1_x = 0;
+
+
+	if (particle_time > 10.f)
+		particle_time = 0.f;
+	//renderer->DrawTexturedRectSeq(0.f, 0.f, 0.f,
+	//	256, 1.f, 1.f, 1.f, 1.f,
+	//	texture_id_sprite,
+	//	sprite_x++, 0, 6, 1, DRAWRANK_CHARACTER);
+
 	for (int i = 0; i < m_objects.size(); ++i) {
 		// 생명이 있을경우에만 그린다. 
 		if (m_objects[i].GetLife() > 0) {
@@ -460,9 +505,13 @@ void SceneMgr::SceneRender() {
 			}
 
 			else if (m_objects[i].type == OBJECT_CHARACTER && m_objects[i].GetTeam() == TEAM_1) {
-				renderer->DrawTexturedRect(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
-					m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(),
-					texture_id_4, m_objects[i].draw_rank);
+				//renderer->DrawTexturedRect(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
+				//	m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(),
+				//	texture_id_4, m_objects[i].draw_rank);
+				renderer->DrawTexturedRectSeq(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
+					m_objects[i].Get_size(), 1.f, 0.f, 0.f, 1.f,
+					texture_id_sprite,
+					sprite_x++, 0, 14, 8, DRAWRANK_CHARACTER);
 
 				// 빌딩 게이지 넣어주기
 				renderer->DrawSolidRectGauge(m_objects[i].Get_x(), m_objects[i].Get_y() + m_objects[i].Get_size(), m_objects[i].Get_z(),
@@ -470,15 +519,38 @@ void SceneMgr::SceneRender() {
 					1.f, (float)m_objects[i].GetLife() / LIFE_CHARACTER, m_objects[i].draw_rank);
 			}
 			else if (m_objects[i].type == OBJECT_CHARACTER && m_objects[i].GetTeam() == TEAM_2) {
-				renderer->DrawTexturedRect(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
-					m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(),
-					texture_id_3, m_objects[i].draw_rank);
+				//renderer->DrawTexturedRect(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
+				//	m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(),
+				//	texture_id_3, m_objects[i].draw_rank);
+
+				renderer->DrawTexturedRectSeq(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
+					m_objects[i].Get_size(), 0.f, 0.f, 1.f, 1.f,
+					texture_id_sprite,
+					sprite1_x++, 0, 14, 8, DRAWRANK_CHARACTER);
+
 
 				// 빌딩 게이지 넣어주기
 				renderer->DrawSolidRectGauge(m_objects[i].Get_x(), m_objects[i].Get_y() + m_objects[i].Get_size(), m_objects[i].Get_z(),
 					m_objects[i].Get_size(), 5.f, 0.f, 0.f, 1.f,
 					1.f, (float)m_objects[i].GetLife() / LIFE_CHARACTER, m_objects[i].draw_rank);
 
+			}
+			else if (m_objects[i].type == OBJECT_BULLET) {
+				//renderer->DrawTexturedRect(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
+				//	m_objects[i].Get_size(), m_objects[i].Get_R(), m_objects[i].Get_G(), m_objects[i].Get_B(), m_objects[i].Get_A(),
+				//	texture_id_3, m_objects[i].draw_rank);
+
+				renderer->DrawSolidRect(m_objects[i].Get_x(),
+					m_objects[i].Get_y(), m_objects[i].Get_z(),
+					m_objects[i].Get_size(), m_objects[i].Get_R(),
+					m_objects[i].Get_G(), m_objects[i].Get_B(),
+					m_objects[i].Get_A(), m_objects[i].draw_rank);
+				particle_time += 0.0005f;
+				renderer->DrawParticle(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
+					10, 1.f, 1.f, 1.f, 1.f,
+					-1.f * m_objects[i].Get_Vx() / sqrt(m_objects[i].Get_Vx()*m_objects[i].Get_Vx() + m_objects[i].Get_Vy()*m_objects[i].Get_Vy()),
+					-1.f * m_objects[i].Get_Vy() / sqrt(m_objects[i].Get_Vx()*m_objects[i].Get_Vx() + m_objects[i].Get_Vy()*m_objects[i].Get_Vy()),
+					texture_id_particle, particle_time);
 			}
 
 			else {

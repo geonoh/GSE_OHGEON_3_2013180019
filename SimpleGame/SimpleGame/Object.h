@@ -48,6 +48,9 @@ public:
 	float Get_B();
 	float Get_A();
 
+	float Get_Vx();
+	float Get_Vy();
+
 	float GetLifeTime();
 	void SetLifeTime(float input_life_time);
 

@@ -97,3 +97,9 @@ int Object::GetArrowNumber() {
 int Object::GetTeam() {
 	return team;
 }
+float Object::Get_Vx() {
+	return v_x;
+}
+float Object::Get_Vy() {
+	return v_y;
+}
