@@ -99,5 +99,23 @@
     <None Include="Shaders\SolidRectWithTextureSeq.vs">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\Particle.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Particle.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SolidRectGauge.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SolidRectGauge.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SolidRectXY.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SolidRectXY.vs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

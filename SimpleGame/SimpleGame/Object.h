@@ -23,6 +23,7 @@ private:
 	int team;
 	
 public:
+	float bullet_particle_time = 0.f;
 	// 그림그리는 우선순위
 	float draw_rank;
 

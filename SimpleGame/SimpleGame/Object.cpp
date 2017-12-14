@@ -64,6 +64,10 @@ void Object::Update(float time) {
 	x += v_x * time * speed;
 	y += v_y * time * speed;
 
+	// 총알타입이면 Bullet Particle Time을 증가시켜준다
+	if (type == OBJECT_BULLET) {
+		bullet_particle_time += 0.001;
+	}
 }
 
 void Object::SetLife(int num) {

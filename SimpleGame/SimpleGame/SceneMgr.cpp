@@ -13,13 +13,14 @@ GLuint texture_id_4 = 0;
 GLuint texture_id_background = 0;
 GLuint texture_id_sprite = 0;
 GLuint texture_id_particle = 0;
+GLuint texture_id_climate = 0;
 
 
 int sprite_x = 0;
 int sprite1_x = 0;
-float particle_time = 0.f;
 DWORD previous_time_particle = 0;
 float elapsed_time_in_sec_particle = 0;
+float climate_time = 0.f;
 
 
 SceneMgr::SceneMgr(float x, float y)
@@ -81,6 +82,7 @@ SceneMgr::SceneMgr(float x, float y)
 	char back_path[] = "./Resource/background.png";
 	char sprite_path[] = "./Resource/sprite2.png";
 	char particle_path[] = "./Resource/particle.png";
+	char particle_climate_path[] = "./Resource/snow.png";
 
 	texture_id_1 = renderer->CreatePngTexture(team_1_path);
 	texture_id_2 = renderer->CreatePngTexture(team_2_path);
@@ -89,7 +91,9 @@ SceneMgr::SceneMgr(float x, float y)
 	texture_id_background = renderer->CreatePngTexture(back_path);
 	texture_id_sprite = renderer->CreatePngTexture(sprite_path);
 	texture_id_particle = renderer->CreatePngTexture(particle_path);
-	
+	texture_id_climate = renderer->CreatePngTexture(particle_climate_path);
+
+
 	char music_file_path[] = "./Resource/bgm_.mp3";
 	char bullet_file_path[] = "./Resource/bullet.mp3";
 	m_sound = new Sound();
@@ -149,7 +153,6 @@ void SceneMgr::Update(float elapsed_time) {
 			start_time_team1 = 0.f;
 		}
 	}
-	(float)(rand() % 250 - rand() % 250) / 250;
 	// 각 팀별 빌딩의 bullet 발사 부분
 	if (is_clock_building == false && m_objects.size() > 0) {
 		// TEAM_1 빌딩이 생명이 있을때만!
@@ -492,8 +495,6 @@ void SceneMgr::SceneRender() {
 		sprite1_x = 0;
 
 
-	if (particle_time > 10.f)
-		particle_time = 0.f;
 	//renderer->DrawTexturedRectSeq(0.f, 0.f, 0.f,
 	//	256, 1.f, 1.f, 1.f, 1.f,
 	//	texture_id_sprite,
@@ -566,12 +567,11 @@ void SceneMgr::SceneRender() {
 					m_objects[i].Get_size(), m_objects[i].Get_R(),
 					m_objects[i].Get_G(), m_objects[i].Get_B(),
 					m_objects[i].Get_A(), m_objects[i].draw_rank);
-				particle_time += 0.0005f;
 				renderer->DrawParticle(m_objects[i].Get_x(), m_objects[i].Get_y(), m_objects[i].Get_z(),
 					10, 1.f, 1.f, 1.f, 1.f,
 					-1.f * m_objects[i].Get_Vx() / sqrt(m_objects[i].Get_Vx()*m_objects[i].Get_Vx() + m_objects[i].Get_Vy()*m_objects[i].Get_Vy()),
 					-1.f * m_objects[i].Get_Vy() / sqrt(m_objects[i].Get_Vx()*m_objects[i].Get_Vx() + m_objects[i].Get_Vy()*m_objects[i].Get_Vy()),
-					texture_id_particle, particle_time);
+					texture_id_particle, abs(sin(m_objects[i].bullet_particle_time)), DRAWRANK_PARTICLE);
 			}
 
 			else {
@@ -583,7 +583,9 @@ void SceneMgr::SceneRender() {
 			}
 		}
 	}
-	
+	climate_time+=0.005;
+	renderer->DrawParticleClimate(0, 0, 0, 5.f, 1, 1, 1, 1, -0.1, -0.1, texture_id_climate,
+		climate_time, 0.01);
 }
 
 

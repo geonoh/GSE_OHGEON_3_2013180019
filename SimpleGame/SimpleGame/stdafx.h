@@ -13,7 +13,7 @@
 #define OBJECT_BULLET		2
 #define OBJECT_ARROW		3
 
-#define SPEED_BULLET		600
+#define SPEED_BULLET		100
 #define SPEED_CHARACTER		300
 #define SPEED_ARROW			100
 
@@ -52,6 +52,7 @@
 
 // depth test
 #define DRAWRANK_BUILDING	0.1
+#define DRAWRANK_PARTICLE	0.1
 #define DRAWRANK_CHARACTER	0.2
 #define DRAWRANK_BULLET		0.3
 #define DRAWRANK_ARROW		0.3
