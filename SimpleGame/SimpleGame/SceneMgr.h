@@ -2,6 +2,7 @@
 #include "Object.h"
 #include "Renderer.h"
 #include "stdafx.h"
+#include  "Sound.h"
 #include <time.h>
 #include <stdlib.h>
 #include <Windows.h>
@@ -12,6 +13,13 @@ class SceneMgr
 {
 	Renderer* renderer;
 	vector<Object> m_objects;
+	bool shake = false;
+
+
+	Sound* m_sound;
+	int bg_sound;
+	int bullet_sound;
+
 public:
 	bool is_clock_building = false;
 	bool is_clocking = false;

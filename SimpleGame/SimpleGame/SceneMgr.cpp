@@ -90,18 +90,32 @@ SceneMgr::SceneMgr(float x, float y)
 	texture_id_sprite = renderer->CreatePngTexture(sprite_path);
 	texture_id_particle = renderer->CreatePngTexture(particle_path);
 	
+	char music_file_path[] = "./Resource/bgm_.mp3";
+	char bullet_file_path[] = "./Resource/bullet.mp3";
+	m_sound = new Sound();
+	bg_sound = m_sound->CreateSound(music_file_path);
+	bullet_sound = m_sound->CreateSound(bullet_file_path);
+
+	m_sound->PlaySoundW(bg_sound, true, 5.2f);
 }
 
 
 SceneMgr::~SceneMgr()
 {
 	m_objects.clear();
+	m_sound->DeleteSound(bg_sound);
+
 	delete renderer;
 }
 
 void SceneMgr::Update(float elapsed_time) {
 	float elapsed_time_in_sec = elapsed_time / 1000.f;
 	team_2_timer = elapsed_time_in_sec;
+
+	if (shake)
+		shake = false;
+	else
+		shake = true;
 
 	// ½Ã°£ ÃøÁ¤ ½ÃÀÛ
 	if (is_clock_building) {
@@ -147,6 +161,8 @@ void SceneMgr::Update(float elapsed_time) {
 					(float)(rand() % 250 - rand() % 250) / 250, (float)(rand() % 250 - rand() % 250) / 250, 0.0f,
 					SPEED_BULLET, OBJECT_BULLET, LIFE_BULLET, LIFETIME_BULLET, TEAM_1
 				));
+				m_sound->PlaySoundW(bullet_sound, false, 5.2f);
+				cout << "½ð´Ù 1ºôµù" << endl;
 			}
 		}
 
@@ -159,6 +175,8 @@ void SceneMgr::Update(float elapsed_time) {
 					(float)(rand() % 250 - rand() % 250) / 250, (float)(rand() % 250 - rand() % 250) / 250, 0.0f,
 					SPEED_BULLET, OBJECT_BULLET, LIFE_BULLET, LIFETIME_BULLET, TEAM_2
 				));
+				m_sound->PlaySoundW(bullet_sound, false, 5.2f);
+				cout << "½ð´Ù 2ºôµù" << endl;
 			}
 		}
 		is_clock_building = true;
@@ -453,16 +471,19 @@ void SceneMgr::CollideCheck() {
 
 void SceneMgr::SceneRender() {
 	// ¹è°æ±×·ÁÁÖ±â
-	
 	renderer->DrawTexturedRect(0.f, 0.f, 0.f,
 		1000.f, 1.f, 1.f, 1.f, 1.f,
 		texture_id_background, DRAWRANK_BACKGROUND);
+	renderer->DrawText(0,0,GLUT_BITMAP_HELVETICA_18,0.f,0.f,0.f,"Hi Guys");
 
 	DWORD current_time = timeGetTime();
 	DWORD elapsed_time = current_time - previous_time_particle;
 	previous_time_particle = current_time;
 
 	elapsed_time_in_sec_particle = elapsed_time / 1000.f;
+
+	//renderer->SetSceneTransform(500.f, 1.f, 1.f, 1.f);
+
 
 	if (sprite_x > 3)
 		sprite_x = 0;
@@ -562,6 +583,7 @@ void SceneMgr::SceneRender() {
 			}
 		}
 	}
+	
 }
 
 

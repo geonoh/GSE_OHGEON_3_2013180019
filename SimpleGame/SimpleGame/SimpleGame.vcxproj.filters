@@ -27,6 +27,9 @@
     <Filter Include="LoadPng">
       <UniqueIdentifier>{b9749b7f-6f8f-4344-837d-51181594874d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{59c757b1-6492-4e3b-86ee-5eba808d02f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -50,6 +53,9 @@
     <ClInclude Include="LoadPng.h">
       <Filter>LoadPng</Filter>
     </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SimpleGame.cpp">
@@ -69,6 +75,9 @@
     </ClCompile>
     <ClCompile Include="LoadPng.cpp">
       <Filter>LoadPng</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

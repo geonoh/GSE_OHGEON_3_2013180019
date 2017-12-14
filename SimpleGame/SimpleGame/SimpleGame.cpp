@@ -27,7 +27,6 @@ bool left_button_down = false;
 DWORD previous_time = 0;
 
 float cool_time_elapsed = 0;
-
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -41,6 +40,7 @@ void RenderScene(void)
 	previous_time = current_time;
 
 	// ·»´õ¸µ
+	
 	p_Scene->Update((float)elapsed_time);
 	p_Scene->SceneRender();
 
