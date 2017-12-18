@@ -571,7 +571,7 @@ void SceneMgr::SceneRender() {
 					10, 1.f, 1.f, 1.f, 1.f,
 					-1.f * m_objects[i].Get_Vx() / sqrt(m_objects[i].Get_Vx()*m_objects[i].Get_Vx() + m_objects[i].Get_Vy()*m_objects[i].Get_Vy()),
 					-1.f * m_objects[i].Get_Vy() / sqrt(m_objects[i].Get_Vx()*m_objects[i].Get_Vx() + m_objects[i].Get_Vy()*m_objects[i].Get_Vy()),
-					texture_id_particle, abs(sin(m_objects[i].bullet_particle_time)), DRAWRANK_PARTICLE);
+					texture_id_particle, m_objects[i].bullet_particle_time, DRAWRANK_PARTICLE);
 			}
 
 			else {
