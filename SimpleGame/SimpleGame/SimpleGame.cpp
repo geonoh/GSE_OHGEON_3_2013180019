@@ -27,29 +27,43 @@ bool left_button_down = false;
 DWORD previous_time = 0;
 
 float cool_time_elapsed = 0;
+bool is_start = false;
+int who_is_win = DRAW;
+
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	//g_Renderer->DrawSolidRect(0, 0, 0, 100, 1, 0, 1, 1);
 
-
-	// 업데이트는 프레임당 1회. 즉 RendefScene이 호출될때 한 번이면 됨.
-	DWORD current_time = timeGetTime();
-	DWORD elapsed_time = current_time - previous_time;
-	previous_time = current_time;
-
-	// 렌더링
-	
-	p_Scene->Update((float)elapsed_time);
-	p_Scene->SceneRender();
-
+	if (is_start) {
+		if (who_is_win == DRAW)
+			p_Scene->SceneRender();
+		if (who_is_win == TEAM_1) {
+			p_Scene->AIWinRender();
+		}
+		if (who_is_win == TEAM_2) {
+			p_Scene->PlayerWinRender();
+		}
+	}
+	else {
+		p_Scene->TitleRender();
+	}
 	glutSwapBuffers();
 }
 
 void Idle(void)
 {
+	// 업데이트는 프레임당 1회. 즉 RendefScene이 호출될때 한 번이면 됨.
+	if (is_start) {
+		if (who_is_win == DRAW) {
+			DWORD current_time = timeGetTime();
+			DWORD elapsed_time = current_time - previous_time;
+			previous_time = current_time;
 
+			p_Scene->Update((float)elapsed_time);
+		}
+		who_is_win = p_Scene->who_is_win_scmgr;
+	}
 	RenderScene();
 }
 
@@ -61,11 +75,8 @@ void MouseInput(int button, int state, int x, int y)
 	}
 
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
-
 		// 좌 클릭 후 떼면 캐릭터 오브젝트 소환
 		if (left_button_down) {		// 클릭됨.
-			std::cout << "x, y : " << x << ", " << y << " 시간 : " << cool_time_elapsed << std::endl;
-
 			p_Scene->MouseInput(x, y);
 		}
 		left_button_down = false;
@@ -82,6 +93,9 @@ void KeyInput(unsigned char key, int x, int y)
 {
 	if (key == 'q') {
 		exit(1);
+	}
+	if (key == 's' || key == 'S') {
+		is_start = true;
 	}
 	std::cout << "test" << std::endl;
 	RenderScene();
@@ -116,8 +130,7 @@ int main(int argc, char **argv)
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
 	glutKeyboardFunc(KeyInput);
-
-	glutMotionFunc(MotionInput);	// 교수님 코드 참조
+	glutMotionFunc(MotionInput);
 	glutMouseFunc(MouseInput);
 	glutSpecialFunc(SpecialKeyInput);
 
