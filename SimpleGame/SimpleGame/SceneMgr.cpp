@@ -82,8 +82,6 @@ SceneMgr::SceneMgr(float x, float y)
 	// Image ID 만들어주기
 	char team_1_path[] = "./Resource/emote_laugh.png";
 	char team_2_path[] = "./Resource/emote_cry.png";
-	char team_3_path[] = "./Resource/Blue_King_Laughing.png";
-	char team_4_path[] = "./Resource/Red_King_Angry.png";
 	char back_path[] = "./Resource/background.png";
 	char sprite_path[] = "./Resource/sprite2.png";
 	char particle_path[] = "./Resource/particle.png";
@@ -96,8 +94,6 @@ SceneMgr::SceneMgr(float x, float y)
 
 	texture_id_1 = renderer->CreatePngTexture(team_1_path);
 	texture_id_2 = renderer->CreatePngTexture(team_2_path);
-	texture_id_3 = renderer->CreatePngTexture(team_3_path);
-	texture_id_4 = renderer->CreatePngTexture(team_4_path);
 	texture_id_background = renderer->CreatePngTexture(back_path);
 	texture_id_sprite = renderer->CreatePngTexture(sprite_path);
 	texture_id_particle = renderer->CreatePngTexture(particle_path);
